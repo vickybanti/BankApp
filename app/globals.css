@@ -103,7 +103,7 @@
   .text-36 {
     @apply text-[36px] leading-[44px];
   }
-
+ 
   /* Home */
   .home {
     @apply flex flex-row w-full no-scrollbar max-xl:max-h-screen max-xl:overflow-y-scroll;
