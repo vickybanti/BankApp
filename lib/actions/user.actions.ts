@@ -3,7 +3,17 @@
 import { ID } from "node-appwrite"
 import { createAdminClient, createSessionClient } from "../appwrite"
 import { cookies } from "next/headers"
-import { parseStringify } from "../utils"
+import { encryptId, extractCustomerIdFromUrl, parseStringify } from "../utils"
+import { CountryCode, ProcessorTokenCreateRequest, ProcessorTokenCreateRequestProcessorEnum, Products } from "plaid"
+import plaidClient from "../plaid"
+import { access } from "fs"
+import { revalidatePath } from "next/cache"
+import { addFundingSource, createDwollaCustomer } from "./dwolla.actions"
+
+const {APPWRITE_DATABASE_ID:DATABASE_ID,
+  APPWRITE_USER_COLLECTION:USER_COLLECTION_ID,
+  APPWRITE_BANK_COLLECTION:BANK_COLLECTION_ID
+} = process.env
 
 export const signIn = async ({email, password}:signInProps) => {
     try {
@@ -17,15 +27,39 @@ export const signIn = async ({email, password}:signInProps) => {
 }
 
 export const signUp = async (userData: SignUpParams) => {
-    try {
-         const { account } = await createAdminClient();
+  let newUserAccount; 
+
+  try {
+         const { account, database } = await createAdminClient();
          const {email, password, firstName,lastName} = userData
 
-  const newUserAccount = await account.create(
+         
+  newUserAccount = await account.create(
   ID.unique(), email, password, `${firstName} ${lastName}`
 );
 
-  const session = await account.createEmailPasswordSession(email, password);
+if(!newUserAccount) throw new Error('Error creating user account')
+ 
+ const dwollaCusotmerUrl = await createDwollaCustomer({
+  ...userData,
+  type:'personal'
+ })
+
+ if(!dwollaCusotmerUrl) throw new Error('Error creating dwolla customer')
+ const dwollaCustomerId = extractCustomerIdFromUrl(dwollaCusotmerUrl)
+  const newUser = await database.createDocument(
+    DATABASE_ID!,
+    USER_COLLECTION_ID!,
+    ID.unique(),
+    {
+      ...userData,
+      dwollaCustomerId,
+      dwollaCusotmerUrl,
+      userId: newUserAccount.$id,
+    }
+  );
+ 
+ const session = await account.createEmailPasswordSession(email, password);
 
   (await cookies()).set("appwrite-session", session.secret, {
     path: "/",
@@ -33,7 +67,7 @@ export const signUp = async (userData: SignUpParams) => {
     sameSite: "strict",
     secure: true,
   });
-  return parseStringify(newUserAccount)
+  return parseStringify(newUser)
     } catch (error) {
         console.error("Error", error)
     }
@@ -59,3 +93,119 @@ export const logoutAccount = async () => {
         return null;
     }
 }
+
+export const createLinkToken = async (user: User) => {
+    try {
+      const tokenParams = {
+        user: {
+          client_user_id: user.$id,
+        },
+        client_name: user.name,
+        products: ["auth"] as Products[],
+        country_codes: ["US"] as CountryCode[],
+        language: 'en'
+      }
+      const response = await plaidClient.linkTokenCreate(tokenParams)
+      return parseStringify({linkToken: response.data.link_token})
+    } catch (error) {
+        console.error("Error", error)
+    }}
+//exchange token helps to exgange the public token for an access token to do lots of stuff (link accounts, get transactions, etc)
+//1. create a link token
+//2. use the link token to create a plaid link on Plain link by triggering flow to connectiong to bank accounjt to application through plaid link
+//3. use the public token to exchange for an access token 
+// //4. use the access token to get bank account information
+// 5. Processor
+//5
+
+export const createBankAccount = async (
+  {
+        userId,
+        bankId,
+       accountId,
+     accessToken,
+fundingSourceUrl,
+      sharableId,
+}:createBankAccountProps) => {
+  try {
+    const { database } = await createAdminClient();
+    const response = await database.createDocument(
+      DATABASE_ID!,
+      BANK_COLLECTION_ID!,
+      ID.unique(),
+      {
+        userId,
+        bankId,
+        accountId,
+        accessToken,
+        fundingSourceUrl,
+        sharableId
+      }
+    );
+    return parseStringify(response);
+  } catch (error) {
+    console.error("Error", error);
+  }
+}
+
+const exchangePublicToken = async ({publicToken, user}: exchangePublicTokenProps) => {
+  try {
+    // exchange the public token for an access token and item ID
+    const response = await plaidClient.itemPublicTokenExchange({
+      public_token: publicToken,
+    });
+
+    const accessToken = response.data.access_token;
+    const itemId = response.data.item_id;
+
+    // //4. use the access token to get bank account information
+    const accountsResponse = await plaidClient.accountsGet({
+      access_token: accessToken,
+    });
+
+    const accountData = accountsResponse.data.accounts[0];
+    // const accountId = accountData[0].account_id;
+
+    //&. use dwolla to process the payment using the accountID
+
+    const request: ProcessorTokenCreateRequest = {
+      access_token: accessToken,
+      account_id: accountData.account_id,
+      processor: 'dwolla' as ProcessorTokenCreateRequestProcessorEnum};
+
+      const processTokenResponse = await plaidClient.processorTokenCreate(request);
+      const processorToken = processTokenResponse.data.processor_token;
+      
+      //Create a funding source URL for the account using the Dwolla customer ID, processor Token and bank name
+      const fundingSourceUrl = await addFundingSource({
+        processorToken,
+        dwollaCustomerId: user.dwollaCustomerId,
+        bankName: accountData.name,
+      })
+
+      if(!fundingSourceUrl) {
+        throw new Error('Error creating funding source URL');
+      }
+
+      // Create a bank account in your database
+      // using the access token, item ID, and account ID
+
+      await createBankAccount({
+        userId: user.$id,
+        bankId: itemId,
+        accountId: accountData.account_id,
+        accessToken,
+        fundingSourceUrl,
+        sharableId: encryptId(accountData.account_id),
+      });
+
+      revalidatePath('/');
+      return parseStringify({
+       publicTokenExchange: 'complete',
+      });
+    } catch (error) {
+    console.error("Error", error)
+  }
+} 
+
+//atomic functions is a function that either works or fails
