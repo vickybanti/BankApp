@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { Button } from './ui/button'
 import { useRouter } from 'next/navigation'
 import {PlaidLinkOnSuccess, PlaidLinkOptions, usePlaidLink} from 'react-plaid-link'
-import { createLinkToken } from '@/lib/actions/user.actions'
+import { createLinkToken,exchangePublicToken } from '@/lib/actions/user.actions'
 
 const PlaidLink = ({user, variant} :PlaidLinkProps) => {
     const [token, setToken] = useState('')

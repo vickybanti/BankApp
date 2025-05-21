@@ -40,7 +40,7 @@ const formSchema =authFormSchema(type)
   ? {
       firstName: '',
       lastName: '',
-      address: '',
+      address1: '',
       city: '',
       state: '',
       postalCode: '',
@@ -71,7 +71,7 @@ const form = useForm<z.infer<typeof formSchema>>({
         const userData = {
           firstName:data.firstName!,
           lastName:data.lastName!,
-          address:data.address!,
+          address1:data.address1!,
           city:data.city!,
           postalCode:data.postalCode!,
           dateOfBirth:data.dateOfBirth!,
@@ -156,7 +156,7 @@ const form = useForm<z.infer<typeof formSchema>>({
               <FormFields control={form.control} name="lastName" label="Last Name" /> 
              </div>
 
-              <FormFields control={form.control} name="address" label="Address e.g 24 health center" /> 
+              <FormFields control={form.control} name="address1" label="address1 e.g 24 health center" /> 
               <FormFields control={form.control} name="city" label="City e.g port harcourt" /> 
                           <div className='flex gap-4'>
 

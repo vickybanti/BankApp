@@ -11,8 +11,8 @@ import { revalidatePath } from "next/cache"
 import { addFundingSource, createDwollaCustomer } from "./dwolla.actions"
 
 const {APPWRITE_DATABASE_ID:DATABASE_ID,
-  APPWRITE_USER_COLLECTION:USER_COLLECTION_ID,
-  APPWRITE_BANK_COLLECTION:BANK_COLLECTION_ID
+  APPWRITE_USER_COLLECTION_ID:USER_COLLECTION_ID,
+  APPWRITE_BANK_COLLECTION_ID:BANK_COLLECTION_ID
 } = process.env
 
 export const signIn = async ({email, password}:signInProps) => {
@@ -26,12 +26,12 @@ export const signIn = async ({email, password}:signInProps) => {
     }
 }
 
-export const signUp = async (userData: SignUpParams) => {
+export const signUp = async ({password,...userData}: SignUpParams) => {
   let newUserAccount; 
 
   try {
          const { account, database } = await createAdminClient();
-         const {email, password, firstName,lastName} = userData
+         const {email, firstName,lastName} = userData
 
          
   newUserAccount = await account.create(
@@ -40,13 +40,13 @@ export const signUp = async (userData: SignUpParams) => {
 
 if(!newUserAccount) throw new Error('Error creating user account')
  
- const dwollaCusotmerUrl = await createDwollaCustomer({
+ const dwollaCustomerUrl = await createDwollaCustomer({
   ...userData,
   type:'personal'
  })
 
- if(!dwollaCusotmerUrl) throw new Error('Error creating dwolla customer')
- const dwollaCustomerId = extractCustomerIdFromUrl(dwollaCusotmerUrl)
+ if(!dwollaCustomerUrl) throw new Error('Error creating dwolla customer')
+ const dwollaCustomerId = extractCustomerIdFromUrl(dwollaCustomerUrl)
   const newUser = await database.createDocument(
     DATABASE_ID!,
     USER_COLLECTION_ID!,
@@ -54,7 +54,7 @@ if(!newUserAccount) throw new Error('Error creating user account')
     {
       ...userData,
       dwollaCustomerId,
-      dwollaCusotmerUrl,
+      dwollaCustomerUrl,
       userId: newUserAccount.$id,
     }
   );
@@ -100,7 +100,7 @@ export const createLinkToken = async (user: User) => {
         user: {
           client_user_id: user.$id,
         },
-        client_name: user.name,
+        client_name: `${user.firstName} ${user.lastName}`,
         products: ["auth"] as Products[],
         country_codes: ["US"] as CountryCode[],
         language: 'en'
@@ -148,7 +148,7 @@ fundingSourceUrl,
   }
 }
 
-const exchangePublicToken = async ({publicToken, user}: exchangePublicTokenProps) => {
+export const exchangePublicToken = async ({publicToken, user}: exchangePublicTokenProps) => {
   try {
     // exchange the public token for an access token and item ID
     const response = await plaidClient.itemPublicTokenExchange({
