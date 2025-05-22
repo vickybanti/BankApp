@@ -157,15 +157,15 @@ const form = useForm<z.infer<typeof formSchema>>({
              </div>
 
               <FormFields control={form.control} name="address1" label="address1 e.g 24 health center" /> 
-              <FormFields control={form.control} name="city" label="City e.g port harcourt" /> 
+              <FormFields control={form.control} name="city" label="City e.g NYC" /> 
                           <div className='flex gap-4'>
 
-               <FormFields control={form.control} name="state" label="specific state e.g lagos" />  
+               <FormFields control={form.control} name="state" label="specific state e.g LA" />  
               <FormFields control={form.control} name="postalCode" label="postal code e.g 10011" /> 
                            </div> 
                           <div className='flex gap-4'>
 
-              <FormFields control={form.control} name="dateOfBirth" label="date of birth e,g 11.12.1990" /> 
+              <FormFields control={form.control} name="dateOfBirth" label="date of birth e,g 1990-11-12" /> 
               <FormFields control={form.control} name="ssn" label="SSN e,g 1234" /> 
             </div>
             </>

@@ -4,10 +4,27 @@ import TotalBalanceBox from '@/components/TotalBalanceBox'
 import React from 'react'
 import RightSidebar from '@/components/RightSidebar'
 import { getLoggedInUser } from '@/lib/actions/user.actions'
+import { getAccount, getAccounts } from '@/lib/actions/bank.actions'
+import RecentTransactions from '@/components/RecentTransactions'
 
-const Home = async () => {
-  const loggedIn = await getLoggedInUser()
+const Home = async ({searchParams : {id,page}}:SearchParamProps) => {
+  const loggedIn = await getLoggedInUser();
 
+  // ✅ Redirect if not logged in
+  if (!loggedIn || !loggedIn.$id) {
+    redirect('/sign-in')
+  }
+
+  const currentPage = Number(page as string) || '1'
+
+  const accounts = await getAccounts({ 
+    userId: loggedIn.$id
+  })
+  const accountsData = accounts.data
+
+  const appwriteItemId =(id as string) || accountsData[0]?.appwriteItemId;
+
+  const account = await getAccount({ appwriteItemId})
   // ✅ Redirect if not logged in
   if (!loggedIn) {
     redirect('/sign-in')
@@ -20,29 +37,31 @@ const Home = async () => {
           <HeaderBox 
             type="greeting"
             title="Welcome"
-            user={loggedIn.name}
+            user={loggedIn?.name || 'Guest'}
             subtext="Efficiently manage your bank accounts"
           />
 
           <TotalBalanceBox 
-            accounts={[]}
-            totalBanks={1}
-            totalCurrentBalance={1250.53}
+            accounts={accountsData}
+            totalBanks={accounts?.totalBanks}
+            totalCurrentBalance={accounts?.totalCurrentBalance}
           />
         </header>
 
-        RECENT TRANSACTIONS
+       <RecentTransactions 
+       accounts={accountsData}
+       transactions={account?.transactions}
+       appwriteItemId={appwriteItemId}
+       page={currentPage}
+       />
       </div>
 
       <RightSidebar 
         user={loggedIn}
-        transactions={[]}
-        banks={[
-          { $id: "bank1", currentBalance: 1250.53 },
-          { $id: "bank2", currentBalance: 1250.53 }
-        ]}
+        transactions={accounts?.transactions}
+        banks={accountsData?.slice(0,2)}
       />
-    </section>
+     </section>
   )
 }
 
