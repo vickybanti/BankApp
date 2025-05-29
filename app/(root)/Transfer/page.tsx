@@ -1,7 +1,9 @@
 import React from 'react'
 import { getLoggedInUser } from '@/lib/actions/user.actions'
 import { getAccount, getAccounts } from '@/lib/actions/bank.actions'
-import HeaderBox from '../'
+import PaymentTransferForm from '@/components/PaymentTransferForm';
+import HeaderBox from '@/components/HeaderBox';
+
 
 const Tranfer = async() => {
   const loggedIn = await getLoggedInUser();
