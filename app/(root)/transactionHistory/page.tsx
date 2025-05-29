@@ -30,6 +30,14 @@ const TransactionHistory = async ({searchParams: {id,page}}:SearchParamProps) =>
       redirect('/sign-in')
     }
   
+    const rowsPerPage = 10
+    const totalPages = Math.ceil(account?.transactions.length/rowsPerPage)
+
+    const indexOfLastTransaction = currentPage * rowsPerPage
+    const indexOfFirstTransaction = indexOfLastTransaction - rowsPerPage
+    const currentTransaction = transactions.slice(
+        indexOfFirstTransaction, indexOfLastTransaction
+    )
   
   return (
     <div className="transactions">
@@ -63,7 +71,13 @@ const TransactionHistory = async ({searchParams: {id,page}}:SearchParamProps) =>
         </div>
       </div>
       <section className='fkex w-full flex-col gap-6'>
-        <TransactionsTable transaction={account?.transactions}/>
+        <TransactionsTable transaction={currentTransaction}/>
+        {totalPages > 1 && (
+          <div className="my-4 w-full">
+              <Pagination totalPages={totalPages} page={currentPage}/>
+          </div>
+        )}
+      
       </section>
     </div>
   )

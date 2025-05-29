@@ -9,27 +9,23 @@ import RecentTransactions from '@/components/RecentTransactions'
 
 const Home = async ({searchParams : {id,page}}:SearchParamProps) => {
   const loggedIn = await getLoggedInUser();
+   const accounts = await getAccounts({ 
+    userId: loggedIn.$id
+  })
+  const accountsData = accounts?.data
+
 
   // ✅ Redirect if not logged in
-  if (!loggedIn || !loggedIn.$id) {
-    redirect('/sign-in')
-  }
+  if (!loggedIn) return;
 
   const currentPage = Number(page as string) || 1
 
-  const accounts = await getAccounts({ 
-    userId: loggedIn.$id
-  })
-  const accountsData = accounts.data
-
+ 
   const appwriteItemId =(id as string) || accountsData[0]?.appwriteItemId;
 
   const account = await getAccount({ appwriteItemId})
   // ✅ Redirect if not logged in
-  if (!loggedIn) {
-    redirect('/sign-in')
-  }
-
+  
   return (
     <section className='home'>
       <div className="home-content">
@@ -58,7 +54,7 @@ const Home = async ({searchParams : {id,page}}:SearchParamProps) => {
 
       <RightSidebar 
         user={loggedIn}
-        transactions={accounts?.transactions}
+        transactions={account?.transactions}
         banks={accountsData?.slice(0,2)}
       />
      </section>
