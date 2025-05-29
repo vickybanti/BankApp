@@ -128,16 +128,12 @@ export const transactionCategoryStyles = {
     textColor: "text-blue-700",
     chipBackgroundColor: "bg-[#ECFDF3]",
   },
-<<<<<<< HEAD
-
-=======
-  Travel: {
+  Success: {
     borderColor: "border-[#0047AB]",
     backgroundColor: "bg-blue-500",
     textColor: "text-blue-700",
     chipBackgroundColor: "bg-[#ECFDF3]",
   },
->>>>>>> 86eec12 (got recent transactions data)
   default: {
     borderColor: "",
     backgroundColor: "bg-blue-500",
