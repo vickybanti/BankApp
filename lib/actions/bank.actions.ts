@@ -5,7 +5,6 @@ import {
 } from "plaid";
 
 import { plaidClient } from "../plaid";
-import { parseStringify } from "../utils";
 
 import { getTransactionsByBankId } from "./transaction.actions";
 import { getBanks, getBank } from "./user.actions";
@@ -66,7 +65,7 @@ export const getAccounts = async ({ userId }: getAccountsProps) => {
       return total + account.currentBalance;
     }, 0);
 
-    return parseStringify({ data: accounts, totalBanks, totalCurrentBalance });
+    return JSON.parse(JSON.stringify({ data: accounts, totalBanks, totalCurrentBalance }));
   } catch (error) {
     console.error("An error occurred while getting the accounts:", error);
   }
@@ -128,10 +127,11 @@ export const getAccount = async ({ appwriteItemId }: getAccountProps) => {
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );
 
-    return parseStringify({
+    
+    return JSON.parse(JSON.stringify(({
       data: account,
       transactions: allTransactions,
-    });
+    })));
   } catch (error) {
     console.error("An error occurred while getting the account:", error);
   }
@@ -149,7 +149,7 @@ export const getInstitution = async ({
 
     const intitution = institutionResponse.data.institution;
 
-    return parseStringify(intitution);
+    return JSON.parse(JSON.stringify(intitution))
   } catch (error) {
     console.error("An error occurred while getting the accounts:", error);
   }
@@ -187,8 +187,7 @@ export const getTransactions = async ({
 
       hasMore = data.has_more;
     }
-
-    return parseStringify(transactions);
+   return JSON.parse(JSON.stringify(transactions))
   } catch (error) {
     console.error("An error occurred while getting the accounts:", error);
   }

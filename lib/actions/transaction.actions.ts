@@ -2,7 +2,6 @@
 
 import { ID, Query } from "node-appwrite";
 import { createAdminClient } from "../appwrite";
-import { parseStringify } from "../utils";
 
 const {
   APPWRITE_DATABASE_ID: DATABASE_ID,
@@ -24,7 +23,7 @@ export const createTransaction = async (transaction: CreateTransactionProps) => 
       }
     )
 
-    return parseStringify(newTransaction);
+    return JSON.parse(JSON.stringify(newTransaction));
   } catch (error) {
     console.log(error);
   }
@@ -54,7 +53,7 @@ export const getTransactionsByBankId = async ({bankId}: getTransactionsByBankIdP
       ]
     }
 
-    return parseStringify(transactions);
+    return JSON.parse(JSON.stringify(transactions));
   } catch (error) {
     console.log(error);
   }
