@@ -5,7 +5,7 @@ import { getLoggedInUser } from '@/lib/actions/user.actions';
 import { formatAmount } from '@/lib/utils';
 import { redirect } from 'next/navigation';
 import React from 'react'
-import agination from '@/components/Pagination';
+import Pagination from '@/components/Pagination';
 
 
 const TransactionHistory = async ({searchParams: {id,page}}:SearchParamProps) => {
@@ -53,7 +53,7 @@ const TransactionHistory = async ({searchParams: {id,page}}:SearchParamProps) =>
       <div className="space-y-6">
         <div className="transactions-account">
           <div className='flex flex-col gap-2'>
-            <h2 className='font-bold text-18 text-white'>
+            <h2 className='font-bold text-white text-18'>
                 {account?.data.name}
             </h2>
             <p className='text-14 text-blue-25'>
@@ -67,15 +67,15 @@ const TransactionHistory = async ({searchParams: {id,page}}:SearchParamProps) =>
         </div>
         <div className='transactions-account-balance'>
           <p className='text-14'>Current balance</p>
-          <p className='text-24 text-center font-bold'>
+          <p className='font-bold text-center text-24'>
             {formatAmount(account?.cata.currentBalance)}
           </p>
         </div>
       </div>
-      <section className='fkex w-full flex-col gap-6'>
+      <section className='flex-col w-full gap-6 fkex'>
         <TransactionsTable transaction={currentTransaction}/>
         {totalPages > 1 && (
-          <div className="my-4 w-full">
+          <div className="w-full my-4">
               <Pagination totalPages={totalPages} page={currentPage}/>
           </div>
         )}

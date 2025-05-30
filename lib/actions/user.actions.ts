@@ -105,6 +105,7 @@ export async function getLoggedInUser() {
     const user = await getUserInfo({userId: result.$id})
     return parseStringify(user)
   } catch (error) {
+    console.error(error)
     return null;
   }
 }
@@ -115,6 +116,7 @@ export const logoutAccount = async () => {
         (await cookies()).delete("appwrite-session")
         await account.deleteSession("current");
     } catch (error) {
+          console.error(error)
         return null;
     }
 }

@@ -242,7 +242,10 @@ declare interface CategoryBadgeProps {
 
 declare interface TransactionTableProps {
   transactions: Transaction[];
+
 }
+
+// src/types/index.ts
 
 declare interface CategoryProps {
   category: CategoryCount;

@@ -1,6 +1,7 @@
 import { logoutAccount } from '@/lib/actions/user.actions'
 import { useRouter } from 'next/navigation'
 import React from 'react'
+import { Button } from './ui/button'
 
 const Footer = ({user, type="desktop"}:FooterProps) => {
   const router = useRouter()
@@ -17,10 +18,14 @@ const Footer = ({user, type="desktop"}:FooterProps) => {
 
             </p>
         </div>
-        <div className={type ==='mobile'?'footer_email-mobile':'footer_email'}>
+        <div className={`${type ==='mobile'?'footer_email-mobile':'footer_email'} flex justify-between gap-3`}>
             <h1 className='font-normal text-gray-600 truncate text-14'>
                 {user?.firstName}
             </h1>
+
+            <Button variant="secondary" onClick={()=>handleLogout()}>
+              Logout
+            </Button>
             </div>
     </footer>
   )
