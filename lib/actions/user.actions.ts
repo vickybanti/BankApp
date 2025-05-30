@@ -260,7 +260,7 @@ export const getBank= async ({documentId}: getBankProps) => {
   }
 }
 
-export const getBankAccountId= async ({accountId}: getBankByAccountIdProps) => {
+export const getBankByAccountId= async ({accountId}: getBankByAccountIdProps) => {
   try {
     const { database } = await createAdminClient();
     const bank = await database.listDocuments(
