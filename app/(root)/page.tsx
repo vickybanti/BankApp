@@ -5,6 +5,7 @@ import RightSidebar from '@/components/RightSidebar'
 import { getLoggedInUser } from '@/lib/actions/user.actions'
 import { getAccount, getAccounts } from '@/lib/actions/bank.actions'
 import RecentTransactions from '@/components/RecentTransactions'
+import { SearchParamProps } from '@/types'
 
 const Home = async ({searchParams : {id,page}}:SearchParamProps) => {
   const loggedIn = await getLoggedInUser();
