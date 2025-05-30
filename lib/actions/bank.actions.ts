@@ -118,10 +118,7 @@ export const getAccount = async ({ appwriteItemId }: getAccountProps) => {
     const allTransactions = [...transactions, ...transferTransactions].sort(
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );
-      const allTransactions = [...transactions, ...transferTransactions].sort(
-      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-    );
-
+      
     return parseStringify({
       data: account,
       transactions: allTransactions,
