@@ -7,12 +7,19 @@ import { authFormSchema } from '@/lib/utils'
 
  const formSchema = authFormSchema('sign-up')
 
+ type FormSchemaType = z.infer<typeof formSchema>;
+
 interface CustomInput {
-    control : Control<z.infer<typeof formSchema>>,
-    name:FieldPath<z.infer<typeof formSchema>>,
-    label:string,
-    
+  control: Control<FormSchemaType>;
+  name: FieldPath<FormSchemaType>;
+  label: string;
 }
+// interface CustomInput {
+//     control : Control<z.infer<typeof formSchema>>,
+//     name:FieldPath<z.infer<typeof formSchema>>,
+//     label:string,
+    
+// }
 const FormFields = ({control,label,name}:CustomInput) => {
     return (
      <FormField

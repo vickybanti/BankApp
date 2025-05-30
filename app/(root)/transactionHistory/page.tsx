@@ -1,11 +1,11 @@
 import HeaderBox from '@/components/HeaderBox'
+import { Pagination } from '@/components/Pagination';
 import TransactionsTable from '@/components/TransactionsTable';
 import { getAccount, getAccounts } from '@/lib/actions/bank.actions';
 import { getLoggedInUser } from '@/lib/actions/user.actions';
 import { formatAmount } from '@/lib/utils';
 import { redirect } from 'next/navigation';
 import React from 'react'
-import Pagination from '@/components/Pagination';
 
 
 const TransactionHistory = async ({searchParams: {id,page}}:SearchParamProps) => {
@@ -37,7 +37,7 @@ const TransactionHistory = async ({searchParams: {id,page}}:SearchParamProps) =>
 
     const indexOfLastTransaction = currentPage * rowsPerPage
     const indexOfFirstTransaction = indexOfLastTransaction - rowsPerPage
-    const currentTransaction = transactions.slice(
+    const currentTransaction = account?.transactions.slice(
         indexOfFirstTransaction, indexOfLastTransaction
     )
   
@@ -73,7 +73,7 @@ const TransactionHistory = async ({searchParams: {id,page}}:SearchParamProps) =>
         </div>
       </div>
       <section className='flex-col w-full gap-6 fkex'>
-        <TransactionsTable transaction={currentTransaction}/>
+        <TransactionsTable transactions={currentTransaction}/>
         {totalPages > 1 && (
           <div className="w-full my-4">
               <Pagination totalPages={totalPages} page={currentPage}/>

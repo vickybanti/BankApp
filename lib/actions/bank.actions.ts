@@ -146,7 +146,7 @@ export const getTransactions = async ({
   accessToken,
 }: getTransactionsProps) => {
   let hasMore = true;
-  let transactions: any[] = [];
+  const transactions: any[] = [];
 
   try {
     while (hasMore) {
