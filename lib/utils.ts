@@ -2,6 +2,7 @@ import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import qs from "query-string"
 import { z } from "zod";
+import { AccountTypes, CategoryCount, Transaction } from "@/types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -130,6 +131,7 @@ export function getAccountTypeColors(type: AccountTypes) {
 export function countTransactionCategories(
   transactions: Transaction[]
 ): CategoryCount[] {
+
   const categoryCounts: { [category: string]: number } = {};
   let totalCount = 0;
 

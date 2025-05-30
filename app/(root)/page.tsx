@@ -5,27 +5,25 @@ import RightSidebar from '@/components/RightSidebar'
 import { getLoggedInUser } from '@/lib/actions/user.actions'
 import { getAccount, getAccounts } from '@/lib/actions/bank.actions'
 import RecentTransactions from '@/components/RecentTransactions'
-import { SearchParamProps } from '@/types'
 
-const Home = async ({searchParams : {id,page}}:SearchParamProps) => {
+type Props = {
+  searchParams?: { [key: string]: string | string[] | undefined };
+};
+
+const Home = async ({ searchParams }: Props) => {
   const loggedIn = await getLoggedInUser();
-   const accounts = await getAccounts({ 
-    userId: loggedIn.$id
-  })
-  const accountsData = accounts?.data
+  if (!loggedIn) return; // ✅ Early return if not logged in
 
+  const accounts = await getAccounts({ userId: loggedIn.$id });
+  const accountsData = accounts?.data;
 
-  // ✅ Redirect if not logged in
-  if (!loggedIn) return;
+  const id = searchParams?.id as string | undefined;
+  const page = Number(searchParams?.page) || 1;
 
-  const currentPage = Number(page as string) || 1
+  const appwriteItemId = id || accountsData?.[0]?.appwriteItemId;
 
- 
-  const appwriteItemId =(id as string) || accountsData[0]?.appwriteItemId;
+  const account = await getAccount({ appwriteItemId });
 
-  const account = await getAccount({ appwriteItemId})
-  // ✅ Redirect if not logged in
-  
   return (
     <section className='home'>
       <div className="home-content">
@@ -44,21 +42,21 @@ const Home = async ({searchParams : {id,page}}:SearchParamProps) => {
           />
         </header>
 
-       <RecentTransactions 
-       accounts={accountsData}
-       transactions={account?.transactions}
-       appwriteItemId={appwriteItemId}
-       page={currentPage}
-       />
+        <RecentTransactions 
+          accounts={accountsData}
+          transactions={account?.transactions}
+          appwriteItemId={appwriteItemId}
+          page={page}
+        />
       </div>
 
       <RightSidebar 
         user={loggedIn}
         transactions={account?.transactions}
-        banks={accountsData?.slice(0,2)}
+        banks={accountsData?.slice(0, 2)}
       />
-     </section>
-  )
-}
+    </section>
+  );
+};
 
-export default Home
+export default Home;
