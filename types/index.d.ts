@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import { authFormSchema } from '@/lib/utils'
 
 declare type SearchParamProps = {
   params: { [key: string]: string };
@@ -246,6 +247,16 @@ declare interface TransactionTableProps {
 }
 
 // src/types/index.ts
+
+const formSchema = authFormSchema('sign-up')
+
+ 
+export interface CustomInput {
+    control : Control<z.infer<typeof formSchema>>;
+    name:FieldPath<z.infer<typeof formSchema>>;
+    label:string;
+    
+}
 
 declare interface CategoryProps {
   category: CategoryCount;
