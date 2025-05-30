@@ -1,6 +1,8 @@
 import React from 'react'
 import { getLoggedInUser } from '@/lib/actions/user.actions'
-import { getAccount, getAccounts } from '@/lib/actions/bank.actions'
+import { getAccounts } from '@/lib/actions/bank.actions'
+import HeaderBox from '@/components/HeaderBox';
+import BankCards from '@/components/BankCards';
 
 
 const MyBanks = async() => {
@@ -8,7 +10,6 @@ const MyBanks = async() => {
    const accounts = await getAccounts({ 
     userId: loggedIn.$id
   })
-  const accountsData = accounts?.data
   return (
     <section className="flex">
       <div className="my-banks">
@@ -23,8 +24,10 @@ const MyBanks = async() => {
           </h2>
           <div className="flex flex-wrap gap-6">
             {accounts && accounts.data.map((a:Account)=> (
-              <BankCard 
+              <BankCards 
               key={accounts.id}
+              account={a}
+              userName={loggedIn?.firstName}
               
               />
             ))}

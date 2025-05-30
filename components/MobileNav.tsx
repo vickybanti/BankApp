@@ -4,9 +4,6 @@ import {
   Sheet,
   SheetClose,
   SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
 import Image from 'next/image'
@@ -15,7 +12,6 @@ import { sidebarLinks } from '@/constants'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import Footer from './Footer'
-import { getLoggedInUser } from '@/lib/actions/user.actions'
 
 
 const MobileNav = ({user}:MobileNavProps) => {
@@ -70,7 +66,7 @@ const MobileNav = ({user}:MobileNavProps) => {
                         </SheetClose>
                     )
                 })}
-                USER
+            
                  </nav>
         </SheetClose>
 

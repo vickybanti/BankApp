@@ -1,6 +1,6 @@
 import React from 'react'
 import { getLoggedInUser } from '@/lib/actions/user.actions'
-import { getAccount, getAccounts } from '@/lib/actions/bank.actions'
+import { getAccounts } from '@/lib/actions/bank.actions'
 import PaymentTransferForm from '@/components/PaymentTransferForm';
 import HeaderBox from '@/components/HeaderBox';
 

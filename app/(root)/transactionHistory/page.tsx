@@ -5,6 +5,8 @@ import { getLoggedInUser } from '@/lib/actions/user.actions';
 import { formatAmount } from '@/lib/utils';
 import { redirect } from 'next/navigation';
 import React from 'react'
+import agination from '@/components/Pagination';
+
 
 const TransactionHistory = async ({searchParams: {id,page}}:SearchParamProps) => {
   
