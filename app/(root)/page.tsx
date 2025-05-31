@@ -6,7 +6,7 @@ import { getLoggedInUser } from '@/lib/actions/user.actions'
 import { getAccount, getAccounts } from '@/lib/actions/bank.actions'
 import RecentTransactions from '@/components/RecentTransactions'
 
-const Home = async ({searchParams : {id,page}}:SearchParamProps) => {
+const Home = async ({searchParams}:SearchParamProps) => {
   const loggedIn = await getLoggedInUser();
    const accounts = await getAccounts({ 
     userId: loggedIn.$id
@@ -17,10 +17,10 @@ const Home = async ({searchParams : {id,page}}:SearchParamProps) => {
   // ✅ Redirect if not logged in
   if (!loggedIn) return;
 
-  const currentPage = Number(page as string) || 1
+  const currentPage = Number(searchParams?.page as string) || 1
 
  
-  const appwriteItemId =(id as string) || accountsData[0]?.appwriteItemId;
+  const appwriteItemId =(searchParams?.id as string) || accountsData[0]?.appwriteItemId;
 
   const account = await getAccount({ appwriteItemId})
   // ✅ Redirect if not logged in
