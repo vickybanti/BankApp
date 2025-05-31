@@ -8,9 +8,9 @@ import RecentTransactions from '@/components/RecentTransactions'
 
 const Home = async ({
 
-  searchParams?: {
-    id?: string;
-    page?: string;
+  searchParams: {
+    id: string;
+    page: string;
   };
 }) => {
   const loggedIn = await getLoggedInUser();
@@ -23,10 +23,10 @@ const Home = async ({
   // ✅ Redirect if not logged in
   if (!loggedIn) return;
 
-  const currentPage = Number(searchParams?.page as string) || 1
+  const currentPage = Number(searchParams.page as string) || 1
 
  
-  const appwriteItemId =(searchParams?.id as string) || accountsData[0]?.appwriteItemId;
+  const appwriteItemId =(searchParams.id as string) || accountsData[0]?.appwriteItemId;
 
   const account = await getAccount({ appwriteItemId})
   // ✅ Redirect if not logged in
