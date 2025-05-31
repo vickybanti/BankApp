@@ -1,11 +1,6 @@
 /* eslint-disable no-unused-vars */
 
-declare type SearchParamProps = {
-searchParams: {
-    id?: string;
-    page?: string;
-  };
-};
+
 
 // ========================================
 
