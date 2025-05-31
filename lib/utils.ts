@@ -2,7 +2,6 @@ import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import qs from "query-string"
 import { z } from "zod";
-import { AccountTypes, CategoryCount, Transaction } from "@/types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -138,7 +137,7 @@ export function countTransactionCategories(
   // Iterate over each transaction
  if (transactions) {
   transactions.forEach((transaction) => {
-    const category = transaction.category;
+    const category = Array.isArray(transaction.category) ? transaction.category.join(", ") : transaction.category;
 
     if (categoryCounts.hasOwnProperty(category)) {
       categoryCounts[category]++;

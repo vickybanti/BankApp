@@ -69,9 +69,9 @@ declare type Transaction = {
   accountId: string;
   amount: number;
   pending: boolean;
-  category: string;
+  category: string[];
   date: string;
-  image: string;
+  image?: string[];
   type: string;
   $createdAt?: string;
   channel?: string;
