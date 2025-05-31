@@ -9,18 +9,7 @@ import { plaidClient } from "../plaid";
 import { getTransactionsByBankId } from "./transaction.actions";
 import { getBanks, getBank } from "./user.actions";
 
-interface Transaction {
-  id: string;
-  name: string;
-  paymentChannel: string;
-  type: string;
-  accountId: string;
-  amount: number;
-  pending: boolean;
-  category: string[] | null;
-  date: string;
-  image?: string | null;
-}
+
 
 
 // Get multiple bank accounts
@@ -182,6 +171,7 @@ export const getTransactions = async ({
           category: transaction.category,
           date: transaction.date,
           image: transaction.logo_url,
+      
         }))
       );
 
