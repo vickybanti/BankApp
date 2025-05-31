@@ -5,7 +5,6 @@ import { BankTabItem } from './BankTabItem'
 import BankInfo from './BankInfo'
 import TransactionsTable from './TransactionsTable'
 import { Pagination } from './Pagination'
-import { Account, RecentTransactionsProps } from '@/types'
 
 
 const RecentTransactions = ({accounts, 

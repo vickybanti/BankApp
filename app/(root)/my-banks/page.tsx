@@ -3,7 +3,6 @@ import { getLoggedInUser } from '@/lib/actions/user.actions'
 import { getAccounts } from '@/lib/actions/bank.actions'
 import HeaderBox from '@/components/HeaderBox';
 import BankCards from '@/components/BankCards';
-import { Account } from '@/types';
 
 
 const MyBanks = async() => {

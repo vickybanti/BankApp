@@ -1,9 +1,4 @@
 /* eslint-disable no-unused-vars */
-import { authFormSchema } from '@/lib/utils'
-import {Control, FieldPath} from 'react-hook-form'
-import { z } from 'zod'
-
-
 
 declare type SearchParamProps = {
   params: { [key: string]: string };
@@ -32,13 +27,13 @@ declare type LoginUser = {
 
 declare type User = {
   $id: string;
-  name:string;
   email: string;
   userId: string;
   dwollaCustomerUrl: string;
   dwollaCustomerId: string;
   firstName: string;
   lastName: string;
+  name: string;
   address1: string;
   city: string;
   state: string;
@@ -70,7 +65,7 @@ declare type Account = {
 
 declare type Transaction = {
   id: string;
-  $id: string;
+  $id?: string;
   name: string;
   paymentChannel: string;
   type: string;
@@ -81,10 +76,10 @@ declare type Transaction = {
   date: string;
   image: string;
   type: string;
-  $createdAt: string;
-  channel: string;
-  senderBankId: string;
-  receiverBankId: string;
+  $createdAt?: string;
+  channel?: string;
+  senderBankId?: string;
+  receiverBankId?: string;
 };
 
 declare type Bank = {
@@ -208,7 +203,7 @@ declare interface BankTabItemProps {
   appwriteItemId?: string;
 }
 
-declare interface TotlaBalanceBoxProps {
+declare interface TotalBalanceBoxProps {
   accounts: Account[];
   totalBanks: number;
   totalCurrentBalance: number;
@@ -216,7 +211,7 @@ declare interface TotlaBalanceBoxProps {
 
 declare interface FooterProps {
   user: User;
-  type:"mobile" | "desktop";
+  type?: 'mobile' | 'desktop'
 }
 
 declare interface RightSidebarProps {
@@ -247,19 +242,6 @@ declare interface CategoryBadgeProps {
 
 declare interface TransactionTableProps {
   transactions: Transaction[];
-
-}
-
-// src/types/index.ts
-
-const formSchema = authFormSchema('sign-up')
-
- 
-export interface CustomInput {
-    control : Control<z.infer<typeof formSchema>>;
-    name:FieldPath<z.infer<typeof formSchema>>;
-    label:string;
-    
 }
 
 declare interface CategoryProps {

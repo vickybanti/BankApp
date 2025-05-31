@@ -2,6 +2,7 @@
 
 import { ID, Query } from "node-appwrite";
 import { createAdminClient } from "../appwrite";
+// import { CreateTransactionProps, getTransactionsByBankIdProps } from "@/types";
 
 const {
   APPWRITE_DATABASE_ID: DATABASE_ID,
