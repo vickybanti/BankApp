@@ -8,8 +8,16 @@ import { redirect } from 'next/navigation';
 import React from 'react'
 
 
-const TransactionHistory = async ({searchParams: {id,page}}:SearchParamProps) => {
+type SearchParamProps = {
+  searchParams:  Promise<{
+    id: string;
+    page: string;
+  }>;
+};
+const TransactionHistory = async ({searchParams}:SearchParamProps) => {
   
+  const {id,page} = await searchParams;
+
   const loggedIn = await getLoggedInUser();
   
     // ✅ Redirect if not logged in
