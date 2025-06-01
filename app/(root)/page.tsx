@@ -13,6 +13,8 @@ searchParams: {
   };
 };
 const Home = async ({searchParams}:SearchParamProps) => {
+  const id = await searchParams.id
+  const page = await searchParams.page
   const loggedIn = await getLoggedInUser();
    const accounts = await getAccounts({ 
     userId: loggedIn.$id
@@ -23,10 +25,10 @@ const Home = async ({searchParams}:SearchParamProps) => {
   // ✅ Redirect if not logged in
   if (!loggedIn) return;
 
-  const currentPage = Number(searchParams?.page as string) || 1
+  const currentPage = Number(page as string) || 1
 
  
-  const appwriteItemId =(searchParams?.id as string) || accountsData[0]?.appwriteItemId;
+  const appwriteItemId =(id as string) || accountsData[0]?.appwriteItemId;
 
   const account = await getAccount({ appwriteItemId})
   // ✅ Redirect if not logged in
