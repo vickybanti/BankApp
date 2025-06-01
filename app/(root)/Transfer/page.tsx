@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic"; // <- ✅ Tell Next.js not to statically render
 
 import React from 'react'
 import { getLoggedInUser } from '@/lib/actions/user.actions'
@@ -7,7 +8,7 @@ import HeaderBox from '@/components/HeaderBox'
 
 const Transfer = async () => {
   const loggedIn = await getLoggedInUser()
-  const accounts = await getAccounts({ userId: loggedIn.$id })
+  const accounts = await getAccounts({ userId: loggedIn.$id || loggedIn.id })
   const accountsData = accounts?.data
 
   return (
