@@ -13,6 +13,7 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 import { formUrlQuery, formatAmount } from "@/lib/utils";
+import { Account, BankDropdownProps } from "@/types";
 
 export const BankDropdown = ({
   accounts = [],
