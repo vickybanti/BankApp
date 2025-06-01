@@ -8,6 +8,7 @@ import { CountryCode, ProcessorTokenCreateRequest, ProcessorTokenCreateRequestPr
 import { plaidClient } from "../plaid"
 import { revalidatePath } from "next/cache"
 import { addFundingSource, createDwollaCustomer } from "./dwolla.actions"
+import { createBankAccountProps, exchangePublicTokenProps, getBankByAccountIdProps, getBankProps, getBanksProps, getUserInfoProps, signInProps, SignUpParams, User } from "@/types"
 
 const {APPWRITE_DATABASE_ID:DATABASE_ID,
   APPWRITE_USER_COLLECTION_ID:USER_COLLECTION_ID,

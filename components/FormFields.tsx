@@ -1,7 +1,8 @@
 import React from 'react'
 import { FormControl, FormField, FormLabel, FormMessage } from './ui/form'
 import { Input } from './ui/input'
-import {CustomInput} from '@/types'
+import { CustomInput } from '@/types'
+
  
 const FormFields = ({control,label,name}:CustomInput) => {
     return (
