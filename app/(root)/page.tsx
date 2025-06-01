@@ -8,8 +8,8 @@ import RecentTransactions from '@/components/RecentTransactions'
 
 type SearchParamProps = {
   searchParams: {
-    id?: string;
-    page?: string;
+    id: string;
+    page: string;
   };
 };
 
