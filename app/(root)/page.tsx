@@ -8,15 +8,16 @@ import { getAccount, getAccounts } from '@/lib/actions/bank.actions'
 import RecentTransactions from '@/components/RecentTransactions'
 
 type SearchParamProps = {
-  searchParams: {
+  searchParams:  Promise<{
     id: string;
     page: string;
-  };
+  }>;
 };
 
+
 const Home = async ({ searchParams }: SearchParamProps) => {
-  const {id} = searchParams;
-  const {page} = searchParams;
+  const {id} = await searchParams;
+  const {page} = await searchParams;
 
   const loggedIn = await getLoggedInUser();
   if (!loggedIn) return;
