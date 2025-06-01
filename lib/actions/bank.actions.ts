@@ -8,6 +8,7 @@ import { plaidClient } from "../plaid";
 
 import { getTransactionsByBankId } from "./transaction.actions";
 import { getBanks, getBank } from "./user.actions";
+import { Bank, getAccountProps, getAccountsProps, getInstitutionProps, getTransactionsProps, Transaction } from "@/types";
 
 
 
