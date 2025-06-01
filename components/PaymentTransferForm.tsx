@@ -25,6 +25,7 @@ import {
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { BankDropdown } from "./BankDropdown";
+import { PaymentTransferFormProps } from "@/types";
 
 const formSchema = z.object({
   email: z.string().email("Invalid email address"),

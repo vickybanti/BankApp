@@ -2,6 +2,7 @@ import { logoutAccount } from '@/lib/actions/user.actions'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 import { Button } from './ui/button'
+import { FooterProps } from '@/types'
 
 const Footer = ({user, type="desktop"}:FooterProps) => {
   const router = useRouter()
