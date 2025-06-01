@@ -8,7 +8,7 @@ import { CreditCardProps } from '@/types'
 const BankCards = ({account, userName, showBalance=true}:CreditCardProps) => {
   return (
     <div className='flex flex-col'>
-        <Link href={`/transaction-history/>id=${account.appwriteItemId}`} className='bank-card'>
+        <Link href={`/transaction-history/?id=${account.appwriteItemId}`} className='bank-card'>
             <div className="bank-card_content">
                 <div>
                     <h1 className='font-semibold text-white text-16'>
