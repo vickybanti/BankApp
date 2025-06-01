@@ -9,7 +9,7 @@ import { Account } from '@/types';
 const MyBanks = async() => {
   const loggedIn = await getLoggedInUser();
    const accounts = await getAccounts({ 
-    userId: loggedIn.$id
+    userId: loggedIn.$id || loggedIn.id
   })
   return (
     <section className="flex">
