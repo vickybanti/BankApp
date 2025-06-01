@@ -15,8 +15,8 @@ type SearchParamProps = {
 };
 
 const Home = async ({ searchParams }: SearchParamProps) => {
-  const id = searchParams.id;
-  const page = searchParams.page;
+  const {id} = searchParams;
+  const {page} = searchParams;
 
   const loggedIn = await getLoggedInUser();
   if (!loggedIn) return;
