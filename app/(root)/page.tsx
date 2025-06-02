@@ -5,6 +5,7 @@ import RightSidebar from '@/components/RightSidebar'
 import { getLoggedInUser } from '@/lib/actions/user.actions'
 import { getAccount, getAccounts } from '@/lib/actions/bank.actions'
 import RecentTransactions from '@/components/RecentTransactions'
+import Logout from '@/components/Logout'
 
 type SearchParamProps = {
   searchParams:  Promise<{
@@ -30,16 +31,18 @@ const Home = async ({ searchParams }: SearchParamProps) => {
   const account = await getAccount({ appwriteItemId });
 
   return (
-    <section className="home">
+    <section className="home overflow-hidden">
       <div className="home-content">
         <header className="home-header">
+          <div className='flex items-center gap-3'>
           <HeaderBox
             type="greeting"
             title="Welcome"
             user={loggedIn?.firstName || 'Guest'}
             subtext="Efficiently manage your bank accounts"
           />
-
+          <Logout />
+          </div>
           <TotalBalanceBox
             accounts={accountsData}
             totalBanks={accounts?.totalBanks}

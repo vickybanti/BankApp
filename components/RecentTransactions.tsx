@@ -13,6 +13,9 @@ const RecentTransactions = ({accounts,
     appwriteItemId,
     page=1
 }:RecentTransactionsProps) => {
+
+    console.log('transactions', transactions)
+    console.log('accounts', accounts)
     const rowsPerPage = 10
     const totalPages = Math.ceil(transactions.length/rowsPerPage)
 

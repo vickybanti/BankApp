@@ -89,6 +89,10 @@ declare type Transaction = {
   channel?: string;
   senderBankId?: string;
   receiverBankId?: string;
+  personal_finance_category?: {
+    primary: string;
+    secondary: string;
+  };
 };
 
 declare type Bank = {
@@ -246,7 +250,11 @@ declare interface TransactionHistoryTableProps {
 }
 
 declare interface CategoryBadgeProps {
-  category: string;
+  category?: string;
+  personal_finance_category?: {
+    primary: string;
+    secondary: string;
+  };
 }
 
 declare interface TransactionTableProps {

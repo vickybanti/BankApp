@@ -34,7 +34,7 @@ const CategoryBagde = ({category}:CategoryBadgeProps) => {
 
 const TransactionsTable = ({transactions}:TransactionTableProps) => {
   return (
-      <Table>
+      <Table className='!border-DEFAULT !border-t-0 !border-b-0 overflow-x-auto'>
         <TableHeader className='bg-[#f9fafb]'>
             <TableRow>
             <TableHead className="px-2">Transactions</TableHead>
@@ -43,6 +43,7 @@ const TransactionsTable = ({transactions}:TransactionTableProps) => {
             <TableHead className="px-2">Date</TableHead>
             <TableHead className="px-2 max-md:hidden">Channel</TableHead>
             <TableHead className="px-2 max-md:hidden">Category</TableHead>
+            <TableHead className="px-2 max-md:hidden">Date</TableHead>
          </TableRow>
         </TableHeader>
         <TableBody>
@@ -84,7 +85,11 @@ const TransactionsTable = ({transactions}:TransactionTableProps) => {
                         </TableCell>
 
                         <TableCell className='pl-2 pr-10 max-md:hidden'>
-                           <CategoryBagde category={Array.isArray(t.category) ? t.category[0] : t.category} />
+                           <CategoryBagde category={Array.isArray(t.category) ? t.category[0] : (t.category ? t.category : t.personal_finance_category?.primary)} />
+                        </TableCell>
+
+                        <TableCell className='pl-2 pr-10 max-md:hidden'>
+                            {t.date ? formatDateTime(new Date(t.date)).dateOnly : 'N/A'}
                         </TableCell>
                     </TableRow>
                 )
