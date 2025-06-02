@@ -2,7 +2,6 @@ import React from 'react'
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -10,6 +9,7 @@ import {
 } from "@/components/ui/table"
 import { cn, formatAmount, formatDateTime, getTransactionStatus, removeSpecialCharacters } from '@/lib/utils'
 import { transactionCategoryStyles } from '@/constants'
+import { CategoryBadgeProps, Transaction, TransactionTableProps } from '@/types'
 
 const CategoryBagde = ({category}:CategoryBadgeProps) => {
 
@@ -84,7 +84,7 @@ const TransactionsTable = ({transactions}:TransactionTableProps) => {
                         </TableCell>
 
                         <TableCell className='pl-2 pr-10 max-md:hidden'>
-                           <CategoryBagde category={t.category} />
+                           <CategoryBagde category={Array.isArray(t.category) ? t.category[0] : t.category} />
                         </TableCell>
                     </TableRow>
                 )

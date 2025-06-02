@@ -3,6 +3,9 @@ const nextConfig = {
   experimental: {
     turbo: false, // disable turbopack for now
   },
+   images: {
+    domains: ['plaid-merchant-logos.plaid.com'],
+  },
 };
 
 module.exports = nextConfig;

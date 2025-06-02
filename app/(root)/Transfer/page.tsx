@@ -1,9 +1,28 @@
-import React from 'react'
+export const dynamic = "force-dynamic"; // <- ✅ Tell Next.js not to statically render
 
-const Tranfer = () => {
+import React from 'react'
+import { getLoggedInUser } from '@/lib/actions/user.actions'
+import { getAccounts } from '@/lib/actions/bank.actions'
+import PaymentTransferForm from '@/components/PaymentTransferForm'
+import HeaderBox from '@/components/HeaderBox'
+
+const Transfer = async () => {
+  const loggedIn = await getLoggedInUser()
+  const accounts = await getAccounts({ userId: loggedIn.$id || loggedIn.id })
+  const accountsData = accounts?.data
+
   return (
-    <div>Tranfer</div>
+    <section className="payment-transfer">
+      <HeaderBox
+        title="Payment Transfer"
+        subtext="Please provide any specific details"
+      />
+
+      <section className="size-full pt-5">
+        <PaymentTransferForm accounts={accountsData} />
+      </section>
+    </section>
   )
 }
 
-export default Tranfer
+export default Transfer

@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import {PlaidLinkOnSuccess, PlaidLinkOptions, usePlaidLink} from 'react-plaid-link'
 import { createLinkToken,exchangePublicToken } from '@/lib/actions/user.actions'
 import Image from 'next/image'
+import { PlaidLinkProps } from '@/types'
 
 const PlaidLink = ({user, variant} :PlaidLinkProps) => {
     const [token, setToken] = useState('')
@@ -12,7 +13,7 @@ const PlaidLink = ({user, variant} :PlaidLinkProps) => {
     useEffect(() =>  {
         const getLinkToken = async () => {
             const data = await createLinkToken(user);
-            setToken(data.linkToken)
+            setToken(data.link_token)
         }
         getLinkToken();
     },[user]); 
@@ -24,7 +25,7 @@ const PlaidLink = ({user, variant} :PlaidLinkProps) => {
             user
         })
         router.push('/')
-    }, [user]);
+    }, [user,router]);
     
     const config: PlaidLinkOptions = {
         token, 
@@ -44,15 +45,27 @@ const PlaidLink = ({user, variant} :PlaidLinkProps) => {
         ) :
         variant === 'ghost' ? (
             <Button variant="ghost" className='plaidlink-ghost' onClick={()=>open()}>
-               <Image src="/icons/connect-bank-svg" width={24} height={24} alt="connect bank"/>
-                <p className='hidden xl:block text-[16px] font-semibold text-black-2'>Connect bank</p>
-
+                <Image 
+                src="/icons/connect-bank.svg"
+                width={24}
+                height={24}
+                alt="connect bank"
+                />
+                <p className='hiddenl xl:block text-[16px] font-semibold text-black-2'>
+                    Connect bank
+                </p>
             </Button>
         ): (
             <Button className='plaidlink-default' onClick={()=>open()}>
-                <Image src="/icons/connect-bank-svg" width={24} height={24} alt="connect bank"/>
-                <p className='text-[16px] font-semibold text-black-2'>Connect bank</p>
-                
+                <Image 
+                src="/icons/connect-bank.svg"
+                width={24}
+                height={24}
+                alt="connect bank"
+                />
+                <p className='text-[16px] font-semibold text-black-2'>
+                    Connect bank
+                </p>
             </Button>
         )
         }

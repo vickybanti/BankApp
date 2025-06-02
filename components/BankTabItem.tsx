@@ -3,6 +3,7 @@
 import { useSearchParams, useRouter } from "next/navigation";
 
 import { cn, formUrlQuery } from "@/lib/utils";
+import { BankTabItemProps } from "@/types";
 
 export const BankTabItem = ({ account, appwriteItemId }: BankTabItemProps) => {
   const searchParams = useSearchParams();

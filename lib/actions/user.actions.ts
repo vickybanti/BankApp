@@ -3,11 +3,12 @@
 import { ID, Query } from "node-appwrite"
 import { createAdminClient, createSessionClient } from "../appwrite"
 import { cookies } from "next/headers"
-import { encryptId, extractCustomerIdFromUrl, parseStringify } from "../utils"
+import { encryptId, extractCustomerIdFromUrl } from "../utils"
 import { CountryCode, ProcessorTokenCreateRequest, ProcessorTokenCreateRequestProcessorEnum, Products } from "plaid"
 import { plaidClient } from "../plaid"
 import { revalidatePath } from "next/cache"
 import { addFundingSource, createDwollaCustomer } from "./dwolla.actions"
+import { createBankAccountProps, exchangePublicTokenProps, getBankByAccountIdProps, getBankProps, getBanksProps, getUserInfoProps, signInProps, SignUpParams, User } from "@/types"
 
 const {APPWRITE_DATABASE_ID:DATABASE_ID,
   APPWRITE_USER_COLLECTION_ID:USER_COLLECTION_ID,
@@ -23,7 +24,7 @@ export const getUserInfo = async ({userId}:getUserInfoProps) => {
       USER_COLLECTION_ID!,
       [Query.equal('userId', [userId])]
     );
-    return parseStringify(user.documents[0]);
+    return JSON.parse(JSON.stringify(user.documents[0]));
   } catch (error) {
     console.error("Error", error);
   }
@@ -41,7 +42,7 @@ export const signIn = async ({email, password}:signInProps) => {
     secure: true,
   });
           const user = await getUserInfo({ userId:session.userId})
-      return parseStringify(user);
+      return JSON.parse(JSON.stringify(user));
     } catch (error) {
         console.error("Error", error)
     }
@@ -89,7 +90,7 @@ if(!newUserAccount) throw new Error('Error creating user account')
     secure: true,
   });
 
-  return parseStringify(newUser)
+  return JSON.parse(JSON.stringify(newUser))
     } catch (error) {
         console.error("Error", error)
     }
@@ -103,8 +104,9 @@ export async function getLoggedInUser() {
     const result =  await account.get();
 
     const user = await getUserInfo({userId: result.$id})
-    return parseStringify(user)
+    return JSON.parse(JSON.stringify(user))
   } catch (error) {
+    console.error(error)
     return null;
   }
 }
@@ -115,6 +117,7 @@ export const logoutAccount = async () => {
         (await cookies()).delete("appwrite-session")
         await account.deleteSession("current");
     } catch (error) {
+          console.error(error)
         return null;
     }
 }
@@ -126,12 +129,12 @@ export const createLinkToken = async (user: User) => {
           client_user_id: user.$id,
         },
         client_name: `${user.firstName} ${user.lastName}`,
-        products: ["auth"] as Products[],
+        products: ["auth","transactions","identity"] as Products[],
         country_codes: ["US"] as CountryCode[],
         language: 'en'
       }
       const response = await plaidClient.linkTokenCreate(tokenParams)
-      return parseStringify({linkToken: response.data.link_token})
+      return JSON.parse(JSON.stringify({linkToken: response.data.link_token}))
     } catch (error) {
         console.error("Error", error)
     }}
@@ -167,7 +170,7 @@ fundingSourceUrl,
         sharableId
       }
     );
-    return parseStringify(response);
+    return JSON.parse(JSON.stringify(response));
   } catch (error) {
     console.error("Error", error);
   }
@@ -225,9 +228,9 @@ export const exchangePublicToken = async ({publicToken, user}: exchangePublicTok
       });
 
       revalidatePath('/');
-      return parseStringify({
+      return JSON.parse(JSON.stringify({
        publicTokenExchange: 'complete',
-      });
+      }));
     } catch (error) {
     console.error("Error", error)
   }
@@ -240,7 +243,7 @@ export const getBanks= async ({userId}: getBanksProps) => {
       BANK_COLLECTION_ID!,
       [Query.equal('userId', [userId])]
     );
-    return parseStringify(banks.documents);
+    return JSON.parse(JSON.stringify(banks.documents));
   } catch (error) {
     console.error("Error", error);
   }
@@ -254,7 +257,22 @@ export const getBank= async ({documentId}: getBankProps) => {
       BANK_COLLECTION_ID!,
       [Query.equal('$id', [documentId])]
     );
-    return parseStringify(bank.documents[0]);
+    return JSON.parse(JSON.stringify(bank.documents[0]));
+  } catch (error) {
+    console.error("Error", error);
+  }
+}
+
+export const getBankByAccountId= async ({accountId}: getBankByAccountIdProps) => {
+  try {
+    const { database } = await createAdminClient();
+    const bank = await database.listDocuments(
+      DATABASE_ID!,
+      BANK_COLLECTION_ID!,
+      [Query.equal('accountId', [accountId])]
+    );
+    if(bank.total !== 1) return null;
+    return JSON.parse(JSON.stringify(bank.documents[0]));
   } catch (error) {
     console.error("Error", error);
   }

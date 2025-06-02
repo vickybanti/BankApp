@@ -1,11 +1,20 @@
 /* eslint-disable no-unused-vars */
 
-declare type SearchParamProps = {
-  params: { [key: string]: string };
-  searchParams: { [key: string]: string | string[] | undefined };
-};
+
 
 // ========================================
+
+import { Control, FieldPath } from 'react-hook-form'
+import { z } from 'zod'
+import { authFormSchema } from '@/lib/utils'
+
+const formSchema = authFormSchema('sign-up')
+
+declare interface CustomInput {
+  control: Control<z.infer<typeof formSchema>>,
+  name: FieldPath<z.infer<typeof formSchema>>,
+  label: string,
+}
 
 declare type SignUpParams = {
   firstName: string;
@@ -27,13 +36,13 @@ declare type LoginUser = {
 
 declare type User = {
   $id: string;
-  name:string;
   email: string;
   userId: string;
   dwollaCustomerUrl: string;
   dwollaCustomerId: string;
   firstName: string;
   lastName: string;
+  name: string;
   address1: string;
   city: string;
   state: string;
@@ -65,21 +74,21 @@ declare type Account = {
 
 declare type Transaction = {
   id: string;
-  $id: string;
+  $id?: string;
   name: string;
   paymentChannel: string;
   type: string;
   accountId: string;
   amount: number;
   pending: boolean;
-  category: string;
+  category: string[];
   date: string;
-  image: string;
+  image?: string[];
   type: string;
-  $createdAt: string;
-  channel: string;
-  senderBankId: string;
-  receiverBankId: string;
+  $createdAt?: string;
+  channel?: string;
+  senderBankId?: string;
+  receiverBankId?: string;
 };
 
 declare type Bank = {
@@ -203,7 +212,7 @@ declare interface BankTabItemProps {
   appwriteItemId?: string;
 }
 
-declare interface TotlaBalanceBoxProps {
+declare interface TotalBalanceBoxProps {
   accounts: Account[];
   totalBanks: number;
   totalCurrentBalance: number;
@@ -211,7 +220,7 @@ declare interface TotlaBalanceBoxProps {
 
 declare interface FooterProps {
   user: User;
-  type:"mobile" | "desktop";
+  type?: 'mobile' | 'desktop'
 }
 
 declare interface RightSidebarProps {

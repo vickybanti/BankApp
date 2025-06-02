@@ -9,6 +9,7 @@ import {
   formatAmount,
   getAccountTypeColors,
 } from "@/lib/utils";
+import { AccountTypes, BankInfoProps } from "@/types";
 
 const BankInfo = ({ account, appwriteItemId, type }: BankInfoProps) => {
   const router = useRouter();
