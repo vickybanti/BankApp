@@ -1,4 +1,4 @@
-export const dynamic = "force-dynamic"; // <- ✅ Tell Next.js not to statically render
+// export const dynamic = "force-dynamic"; // <- ✅ Tell Next.js not to statically render
 
 import React from 'react'
 import { getLoggedInUser } from '@/lib/actions/user.actions'
