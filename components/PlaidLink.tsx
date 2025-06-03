@@ -5,10 +5,12 @@ import {PlaidLinkOnSuccess, PlaidLinkOptions, usePlaidLink} from 'react-plaid-li
 import { createLinkToken,exchangePublicToken } from '@/lib/actions/user.actions'
 import Image from 'next/image'
 import { PlaidLinkProps } from '@/types'
+import { Loader2 } from 'lucide-react'
 
 const PlaidLink = ({user, variant} :PlaidLinkProps) => {
     const [token, setToken] = useState('')
     const router = useRouter()
+    const [isConnected, setIsConnected] = useState(false)
 
     useEffect(() =>  {
         const getLinkToken = async () => {
@@ -24,6 +26,7 @@ const PlaidLink = ({user, variant} :PlaidLinkProps) => {
             publicToken: public_token,
             user
         })
+        setIsConnected(true)
         router.push('/')
     }, [user,router]);
     
@@ -38,9 +41,14 @@ const PlaidLink = ({user, variant} :PlaidLinkProps) => {
         {variant==='primary' ? (
             <Button className='plaidlink-primary'
             onClick={() => open()}
-            disabled={!ready}
+            disabled={!ready || isConnected}
+            
             >
-                Connect bank
+             {isConnected ? (
+                <>
+                   <Loader2 size={20} className='animate-spin'/> &nbsp;Connected, redirecting to homepage...
+                </>
+              ) : "Connect bank"}
             </Button>
         ) :
         variant === 'ghost' ? (
@@ -48,7 +56,7 @@ const PlaidLink = ({user, variant} :PlaidLinkProps) => {
                 <Image 
                 src="/icons/connect-bank.svg"
                 width={24}
-                height={24}
+                height={24} 
                 alt="connect bank"
                 />
                 <p className='hiddenl xl:block text-[16px] font-semibold text-black-2'>

@@ -93,6 +93,7 @@ if(!newUserAccount) throw new Error('Error creating user account')
   return JSON.parse(JSON.stringify(newUser))
     } catch (error) {
         console.error("Error", error)
+         throw new Error((error instanceof Error ? error.message : "Something went wrong during sign up."))
     }
 }
 
@@ -107,7 +108,7 @@ export async function getLoggedInUser() {
     return JSON.parse(JSON.stringify(user))
   } catch (error) {
     console.error(error)
-    return null;
+    throw new Error((error instanceof Error ? error.message : "Erro signing in."))
   }
 }
 
@@ -173,6 +174,8 @@ fundingSourceUrl,
     return JSON.parse(JSON.stringify(response));
   } catch (error) {
     console.error("Error", error);
+    throw new Error((error instanceof Error ? error.message : "Something went wrong."))
+
   }
 }
 

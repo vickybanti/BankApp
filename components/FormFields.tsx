@@ -4,7 +4,7 @@ import { Input } from './ui/input'
 import { CustomInput } from '@/types'
 
  
-const FormFields = ({control,label,name}:CustomInput) => {
+const FormFields = ({control,label,name,type}:CustomInput) => {
     return (
      <FormField
               control={control}
@@ -15,7 +15,7 @@ const FormFields = ({control,label,name}:CustomInput) => {
     
                 <div className='flex flex-col w-full'>
                     <FormControl>
-                        <Input placeholder={`Enter ${label}`} className='input-class' {...field} type={name ==='password' ? 'password': 'text'}/>
+                        <Input placeholder={`Enter ${label}`} className='input-class' {...field} type={type}/>
                     </FormControl>
                     <FormMessage className="mt-2 form-message" />
     

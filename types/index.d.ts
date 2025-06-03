@@ -14,6 +14,7 @@ declare interface CustomInput {
   control: Control<z.infer<typeof formSchema>>,
   name: FieldPath<z.infer<typeof formSchema>>,
   label: string,
+  type?: string;
 }
 
 declare type SignUpParams = {
