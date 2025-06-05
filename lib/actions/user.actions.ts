@@ -48,54 +48,95 @@ export const signIn = async ({email, password}:signInProps) => {
     }
 }
 
-export const signUp = async ({password,...userData}: SignUpParams) => {
-  let newUserAccount; 
+export const signUp = async ({ password, ...userData }: SignUpParams) => {
+  try {
+    const { account, database } = await createAdminClient();
+    const { email, firstName, lastName } = userData;
+
+    // Step 1: Create Appwrite Account
+    let newUserAccount;
+    try {
+      newUserAccount = await account.create(
+        ID.unique(),
+        email,
+        password,
+        `${firstName} ${lastName}`
+      );
+    } catch (appwriteError: any) {
+      if (appwriteError?.code === 409) {
+        throw new Error("Email already exists. Please use a different email address.");
+      }
+      throw new Error(appwriteError?.message || "Error creating user account.");
+    }
+
+    // Step 2: Create Dwolla Customer
+    let dwollaCustomerUrl: string | null = null;
+    try {
+      dwollaCustomerUrl = await createDwollaCustomer({
+        ...userData,
+        type: "personal",
+      });
+    } catch (error: any) {
+  // Try to extract a clean, user-facing error message
+      console.error("Error", error);
+      throw new Error(error);
+}
+
+
+
+
+    // if (!dwollaCustomerUrl) {
+    //   throw new Error("Dwolla customer creation failed.");
+    // }
+
+    const dwollaCustomerId = extractCustomerIdFromUrl(dwollaCustomerUrl!);
+
+    // Step 3: Create User Document in Appwrite DB
+    const newUser = await database.createDocument(
+      DATABASE_ID!,
+      USER_COLLECTION_ID!,
+      ID.unique(),
+      {
+        ...userData,
+        dwollaCustomerId,
+        dwollaCustomerUrl,
+        userId: newUserAccount.$id,
+      }
+    );
+
+    // Step 4: Create Session
+    const session = await account.createEmailPasswordSession(email, password);
+    (await cookies()).set("appwrite-session", session.secret, {
+      path: "/",
+      httpOnly: true,
+      sameSite: "strict",
+      secure: true,
+    });
+
+    return JSON.parse(JSON.stringify(newUser));
+  } catch (dwollaError: any) {
+    // ONLY RETURN THE RAW ERROR MESSAGE
+   let dwollaMessage = "Error creating Dwolla customer.";
 
   try {
-         const { account, database } = await createAdminClient();
-         const {email, firstName,lastName} = userData
+    // Parse if the error is a stringified JSON
+    const parsedError =
+      typeof dwollaError === "string" ? JSON.parse(dwollaError) : dwollaError;
 
-         
-  newUserAccount = await account.create(
-  ID.unique(), email, password, `${firstName} ${lastName}`
-);
-
-if(!newUserAccount) throw new Error('Error creating user account')
- 
- const dwollaCustomerUrl = await createDwollaCustomer({
-  ...userData,
-  type:'personal'
- })
-
- if(!dwollaCustomerUrl) throw new Error('Error creating dwolla customer')
- const dwollaCustomerId = extractCustomerIdFromUrl(dwollaCustomerUrl)
-  const newUser = await database.createDocument(
-    DATABASE_ID!,
-    USER_COLLECTION_ID!,
-    ID.unique(),
-    {
-      ...userData,
-      dwollaCustomerId,
-      dwollaCustomerUrl,
-      userId: newUserAccount.$id,
+    const embeddedErrors = parsedError?._embedded?.errors;
+    if (Array.isArray(embeddedErrors) && embeddedErrors.length > 0) {
+      dwollaMessage = embeddedErrors[0]?.message || parsedError?.message;
+    } else if (parsedError?.message) {
+      dwollaMessage = parsedError.message;
     }
-  );
- 
- const session = await account.createEmailPasswordSession(email, password);
+  } catch (parseErr) {
+    // Fallback in case parsing fails
+    dwollaMessage = dwollaError?.message || dwollaMessage;
+  }
 
-  (await cookies()).set("appwrite-session", session.secret, {
-    path: "/",
-    httpOnly: true,
-    sameSite: "strict",
-    secure: true,
-  });
-
-  return JSON.parse(JSON.stringify(newUser))
-    } catch (error) {
-        console.error("Error", error)
-         throw new Error((error instanceof Error ? error.message : "Something went wrong during sign up."))
-    }
+  throw new Error(dwollaMessage);
 }
+};
 
 // ... your initilization functions
 

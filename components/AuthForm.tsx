@@ -8,14 +8,21 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Button } from "@/components/ui/button"
-import {Form} from "@/components/ui/form"
+import {Form, FormControl, FormField, FormLabel, FormMessage} from "@/components/ui/form"
 import FormFields from './FormFields'
 import { authFormSchema } from '@/lib/utils'
 import { Loader2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { signIn, signUp } from '@/lib/actions/user.actions'
 import PlaidLink from './PlaidLink'
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import { format, parse } from 'date-fns';
+
+
  
+type ValuePiece = Date | null;
+type Value = ValuePiece | [ValuePiece, ValuePiece];
 
  
 
@@ -26,7 +33,10 @@ const AuthForm = ({type} : {type:string}) => {
   const [isLoading, setIsLoading] = useState(false)
   const [seePassword, setSeePassword] = useState(false)
   const [message,setMessage] = useState('')
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  console.log('value',startDate)
 
+  
   const handleSeePassword = () => {
     setSeePassword(!seePassword)
   }
@@ -54,6 +64,8 @@ const form = useForm<z.infer<typeof formSchema>>({
   resolver: zodResolver(formSchema),
   defaultValues,
 })
+
+  
 
  
   // 2. Define a submit handler.
@@ -167,7 +179,59 @@ const form = useForm<z.infer<typeof formSchema>>({
                            </div> 
                           <div className='flex gap-4'>
 
-              <FormFields control={form.control} name="dateOfBirth" label="Date of birth e,g 1990-11-12" type="text"/> 
+
+
+
+<FormField
+  control={form.control}
+  name="dateOfBirth"
+  render={({ field }) => {
+    const selectedDate = field.value
+      ? parse(field.value, 'yyyy-MM-dd', new Date())
+      : null;
+
+    return (
+      <div className="form-item">
+        <FormLabel className="form-label">Enter your date of birth</FormLabel>
+        <div className="flex flex-col w-full">
+          <FormControl>
+            <DatePicker
+              selected={selectedDate}
+              onChange={(date: Date | null) => {
+                if (date) {
+                  const formatted = format(date, 'yyyy-MM-dd');
+                  field.onChange(formatted); // ✅ Store as string
+                } else {
+                  field.onChange('');
+                }
+              }}
+              dateFormat="yyyy-MM-dd"
+              placeholderText="Select date"
+              className="input-class w-34 h-9 px-2"
+              showYearDropdown
+              aria-label="date of birth"
+            />
+          </FormControl>
+          <FormMessage className="mt-2 form-message" />
+        </div>
+      </div>
+    );
+  }}
+/>
+
+
+              {/* <DatePicker
+        selected={startDate}
+        onChange={(date) => setStartDate(date)}
+        dateFormat="yyyy-MM-dd"
+        placeholderText="Select date"
+        name="dateOfBirth"
+        value={startDate ? format(startDate, 'yyyy-MM-dd') : ''}
+        className="input-class"
+        aria-label="date of birth"
+        showYearDropdown
+      /> */}
+               {/* <FormFields control={form.control} name="dateOfBirth" label="Date of birth e,g 1990-11-12" type="text"/>    */}
               <FormFields control={form.control} name="ssn" label="SSN e,g 1234" type="number"/> 
             </div>
             </>

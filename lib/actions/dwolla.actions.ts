@@ -47,8 +47,9 @@ export const createOnDemandAuthorization = async () => {
     );
     const authLink = onDemandAuthorization.body._links;
     return authLink;
-  } catch (err) {
+  } catch (err:any) {
     console.error("Creating an On Demand Authorization Failed: ", err);
+     throw new Error( err.message)
   }
 };
 
@@ -59,8 +60,31 @@ export const createDwollaCustomer = async (
     return await dwollaClient
       .post("customers", newCustomer)
       .then((res) => res.headers.get("location"));
-  } catch (err) {
-    console.error("Creating a Dwolla Customer Failed: ", err);
+  } catch (err:any) {
+    console.error("Creating a Dwolla Customer Failed:", err);
+
+    let message = "An unexpected error occurred while creating the customer.";
+
+    try {
+      // Attempt to parse the error message (which is likely a stringified JSON)
+      const parsed = JSON.parse(err.message);
+
+      if (
+        parsed?._embedded?.errors &&
+        Array.isArray(parsed._embedded.errors) &&
+        parsed._embedded.errors.length > 0
+      ) {
+        message = parsed._embedded.errors[0].message;
+      } else if (parsed?.message) {
+        message = parsed.message;
+      }
+    } catch (parseError) {
+      // Fallback in case JSON.parse fails
+      message = err.message || message;
+    }
+
+    throw new Error(message);
+
   }
 };
 
