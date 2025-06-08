@@ -1,4 +1,3 @@
-"use client"
 import HeaderBox from '@/components/HeaderBox'
 import TotalBalanceBox from '@/components/TotalBalanceBox'
 import React from 'react'
@@ -7,8 +6,7 @@ import { getLoggedInUser } from '@/lib/actions/user.actions'
 import { getAccount, getAccounts } from '@/lib/actions/bank.actions'
 import RecentTransactions from '@/components/RecentTransactions'
 import Logout from '@/components/Logout'
-import { Router } from 'lucide-react'
-import { redirect, useRouter } from 'next/navigation'
+import {redirect} from 'next/navigation'
 
 type SearchParamProps = {
   searchParams:  Promise<{
@@ -18,13 +16,12 @@ type SearchParamProps = {
 };
 
 const Home = async ({ searchParams }: SearchParamProps) => {
-  const router = useRouter()
 
   const {id} = await searchParams;
   const {page} = await searchParams;
 
   const loggedIn = await getLoggedInUser();
-  if (!loggedIn) router.push('/sign-in');
+  if (!loggedIn) redirect('/auth/sign-in');
 
   const accounts = await getAccounts({ userId: loggedIn.$id });
   const accountsData = accounts?.data;

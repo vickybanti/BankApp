@@ -8,16 +8,31 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Button } from "@/components/ui/button"
-import {Form, FormControl, FormField, FormLabel, FormMessage} from "@/components/ui/form"
+import {Form, FormControl, FormField, FormLabel, FormMessage,FormItem,FormDescription } from "@/components/ui/form"
 import FormFields from './FormFields'
 import { authFormSchema } from '@/lib/utils'
 import { Loader2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { signIn, signUp } from '@/lib/actions/user.actions'
 import PlaidLink from './PlaidLink'
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import { format, parse } from 'date-fns';
+import { Calendar } from "@/components/ui/calendar"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import { format } from "date-fns"
+import { CalendarIcon } from "lucide-react"
+import { toast } from "sonner"
+import { cn } from "@/lib/utils"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import {usStates} from '@/constants'
 
 
  
@@ -33,8 +48,9 @@ const AuthForm = ({type} : {type:string}) => {
   const [isLoading, setIsLoading] = useState(false)
   const [seePassword, setSeePassword] = useState(false)
   const [message,setMessage] = useState('')
-  const [startDate, setStartDate] = useState<Date | null>(null);
-  console.log('value',startDate)
+   const [date, setDate] = React.useState<Date | undefined>(null)
+  console.log('date',date)
+  console.log(usStates.map((us)=>us.code))
 
   
   const handleSeePassword = () => {
@@ -81,7 +97,7 @@ const form = useForm<z.infer<typeof formSchema>>({
         address1: data.address1!,
         city: data.city!,
         postalCode: data.postalCode!,
-        dateOfBirth: data.dateOfBirth!,
+        dateOfBirth: data.dateOfBirth!.toString(),
         state: data.state!,
         ssn: data.ssn!,
         email: data.email,
@@ -119,7 +135,7 @@ const form = useForm<z.infer<typeof formSchema>>({
   }
 }
 
-
+console.log(usStates.code)
   
     return (
     <section className='auth-form'>
@@ -174,64 +190,88 @@ const form = useForm<z.infer<typeof formSchema>>({
               <FormFields control={form.control} name="city" label="City e.g NYC" type="text"/> 
                           <div className='flex gap-4'>
 
-               <FormFields control={form.control} name="state" label="Specific state e.g LA" type="text"/>  
+
+
+         <FormField
+  control={form.control}
+  name="state"
+  render={({ field }) => (
+    <FormItem className="flex flex-col">
+      <FormLabel>State</FormLabel>
+      <Select value={field.value} onValueChange={field.onChange}>
+        <SelectTrigger className="w-[180px]">
+          <SelectValue placeholder="Select state" />
+        </SelectTrigger>
+        <SelectContent className="bg-white">
+          {usStates.map((state) => (
+            <SelectItem key={state.id} value={state.code}>
+              {state.name}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+      <FormMessage />
+    </FormItem>
+  )}
+/>
+
+
+               {/* <FormFields control={form.control} name="state" label="Specific state e.g LA" type="text"/>   */}
               <FormFields control={form.control} name="postalCode" label="postal code e.g 10011" type="number"/> 
                            </div> 
                           <div className='flex gap-4'>
 
 
 
-
 <FormField
-  control={form.control}
-  name="dateOfBirth"
-  render={({ field }) => {
-    const selectedDate = field.value
-      ? parse(field.value, 'yyyy-MM-dd', new Date())
-      : null;
+          control={form.control}
+          name="dateOfBirth"
+          render={({ field }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel>Date of birth</FormLabel>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant={"outline"}
+                      className={cn(
+                        "w-[240px] pl-3 text-left font-normal",
+                        !field.value && "text-muted-foreground"
+                      )}
+                    >
+                      
+                      {field.value ? (
+                        format(field.value, "yyyy-MM-dd")                      ) : (
+                        <span>Pick a date</span>
+                      )}
+                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0 bg-white" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={field.value}
+                    onSelect={(date) => {
+                      field.onChange(date ? format(date, "yyyy-MM-dd") : "");
+                    }}                   
+                    disabled={(date) =>
+                      date > new Date() || date < new Date("1900-01-01")
+                    }
+                    captionLayout="dropdown"
+                  />
+                </PopoverContent>
+              </Popover>
+              <FormDescription>
+                format:YYYY-MM-DD
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-    return (
-      <div className="form-item">
-        <FormLabel className="form-label">Enter your date of birth</FormLabel>
-        <div className="flex flex-col w-full">
-          <FormControl>
-            <DatePicker
-              selected={selectedDate}
-              onChange={(date: Date | null) => {
-                if (date) {
-                  const formatted = format(date, 'yyyy-MM-dd');
-                  field.onChange(formatted); // ✅ Store as string
-                } else {
-                  field.onChange('');
-                }
-              }}
-              dateFormat="yyyy-MM-dd"
-              placeholderText="Select date"
-              className="input-class w-34 h-9 px-2"
-              showYearDropdown
-              aria-label="date of birth"
-            />
-          </FormControl>
-          <FormMessage className="mt-2 form-message" />
-        </div>
-      </div>
-    );
-  }}
-/>
 
-
-              {/* <DatePicker
-        selected={startDate}
-        onChange={(date) => setStartDate(date)}
-        dateFormat="yyyy-MM-dd"
-        placeholderText="Select date"
-        name="dateOfBirth"
-        value={startDate ? format(startDate, 'yyyy-MM-dd') : ''}
-        className="input-class"
-        aria-label="date of birth"
-        showYearDropdown
-      /> */}
-               {/* <FormFields control={form.control} name="dateOfBirth" label="Date of birth e,g 1990-11-12" type="text"/>    */}
+            
               <FormFields control={form.control} name="ssn" label="SSN e,g 1234" type="number"/> 
             </div>
             </>
