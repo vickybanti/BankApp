@@ -15,6 +15,18 @@ const {APPWRITE_DATABASE_ID:DATABASE_ID,
   APPWRITE_BANK_COLLECTION_ID:BANK_COLLECTION_ID
 } = process.env
 
+interface DwollaEmbeddedError {
+  message?: string;
+}
+
+interface DwollaError {
+  message?: string;
+  _embedded?: {
+    errors?: DwollaEmbeddedError[];
+  };
+}
+
+
 //get user from database
 export const getUserInfo = async ({userId}:getUserInfoProps) => {
    try {
@@ -64,9 +76,10 @@ export const signUp = async ({ password, ...userData }: SignUpParams) => {
       );
     } catch (appwriteError: unknown) {
       if (appwriteError instanceof Error) {
-        if ((appwriteError as any)?.code === 409) { // Optional: refine this type if you know the shape
+        if ("code" in appwriteError && appwriteError.code === 409) {
           throw new Error("Email already exists. Please use a different email address.");
         }
+        
         throw new Error(appwriteError.message || "Error creating user account.");
       }
       throw new Error("Unknown error occurred.");
@@ -129,10 +142,10 @@ export const signUp = async ({ password, ...userData }: SignUpParams) => {
   
     try {
       // Parse if the error is a stringified JSON
-      const parsedError =
-        typeof dwollaError === "string" ? JSON.parse(dwollaError) : dwollaError;
+      const parsedError:DwollaError  =
+      typeof dwollaError === "string" ? JSON.parse(dwollaError) : dwollaError as DwollaError;
   
-      const embeddedErrors = (parsedError as any)?._embedded?.errors;
+      const embeddedErrors = parsedError._embedded?.errors;
   
       if (Array.isArray(embeddedErrors) && embeddedErrors.length > 0) {
         dwollaMessage = embeddedErrors[0]?.message || (parsedError as any)?.message;
