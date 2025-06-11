@@ -15,6 +15,8 @@ type SearchParamProps = {
   }>;
 };
 
+export const dynamic = 'force-dynamic'; // ensure SSR
+
 const Home = async ({ searchParams }: SearchParamProps) => {
 
   
