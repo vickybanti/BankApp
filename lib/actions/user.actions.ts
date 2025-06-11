@@ -148,10 +148,11 @@ export const signUp = async ({ password, ...userData }: SignUpParams) => {
       const embeddedErrors = parsedError._embedded?.errors;
   
       if (Array.isArray(embeddedErrors) && embeddedErrors.length > 0) {
-        dwollaMessage = embeddedErrors[0]?.message || (parsedError as any)?.message;
-      } else if ((parsedError as any)?.message) {
-        dwollaMessage = (parsedError as any).message;
+        dwollaMessage = embeddedErrors[0]?.message || parsedError.message || dwollaMessage;
+      } else if (parsedError.message) {
+        dwollaMessage = parsedError.message;
       }
+      
     } catch {
       // Fallback in case parsing fails
       if (dwollaError instanceof Error) {
