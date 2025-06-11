@@ -171,27 +171,43 @@ export const signUp = async ({ password, ...userData }: SignUpParams) => {
 
 export async function getLoggedInUser() {
   try {
-    const { account } = await createSessionClient();
-    const result =  await account.get();
+    const sessionClient = await createSessionClient();
 
-    const user = await getUserInfo({userId: result.$id})
-    return JSON.parse(JSON.stringify(user))
+    if (!sessionClient) {
+      throw new Error("No session found.");
+    }
+
+    const result = await sessionClient.account.get();
+
+    const user = await getUserInfo({ userId: result.$id });
+    return JSON.parse(JSON.stringify(user));
   } catch (error) {
-    console.error(error)
-    throw new Error((error instanceof Error ? error.message : "Erro signing in."))
+    console.error(error);
+    throw new Error(error instanceof Error ? error.message : "Error signing in.");
   }
 }
 
+
 export const logoutAccount = async () => {
-    try{
-        const { account } = await createSessionClient();
-        (await cookies()).delete("appwrite-session")
-        await account.deleteSession("current");
-    } catch (error) {
-          console.error(error)
-        return null;
+  try {
+    const sessionClient = await createSessionClient();
+
+    if (!sessionClient) {
+      throw new Error("No session client found.");
     }
-}
+
+    const { account } = sessionClient;
+
+    // Delete the session cookie
+    (await cookies()).delete("appwrite-session");
+
+    // Log out from Appwrite
+    await account.deleteSession("current");
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
 
 export const createLinkToken = async (user: User) => {
     try {
