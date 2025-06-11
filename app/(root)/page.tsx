@@ -29,6 +29,8 @@ const Home = async ({ searchParams }: SearchParamProps) => {
   
 
   const accounts = await getAccounts({ userId: loggedIn.$id });
+  if(!accounts) return;
+
   const accountsData = accounts?.data;
 
   const currentPage = Number(page) || 1;

@@ -171,19 +171,15 @@ export const signUp = async ({ password, ...userData }: SignUpParams) => {
 
 export async function getLoggedInUser() {
   try {
-    const sessionClient = await createSessionClient();
+    const { account } = await createSessionClient();
+    const result = await account.get();
 
-    if (!sessionClient) {
-      throw new Error("No session found.");
-    }
+    const user = await getUserInfo({ userId: result.$id})
 
-    const result = await sessionClient.account.get();
-
-    const user = await getUserInfo({ userId: result.$id });
     return JSON.parse(JSON.stringify(user));
   } catch (error) {
-    console.error(error);
-    throw new Error(error instanceof Error ? error.message : "Error signing in.");
+    console.log(error)
+    return null;
   }
 }
 
