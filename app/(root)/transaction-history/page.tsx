@@ -14,6 +14,9 @@ type SearchParamProps = {
     page: string;
   }>;
 };
+
+export const dynamic = 'force-dynamic';
+
 const TransactionHistory = async ({searchParams}:SearchParamProps) => {
   
   const {id,page} = await searchParams;
