@@ -23,7 +23,6 @@ import {
 } from "@/components/ui/popover"
 import { format } from "date-fns"
 import { CalendarIcon } from "lucide-react"
-import { toast } from "sonner"
 import { cn } from "@/lib/utils"
 import {
   Select,
@@ -48,7 +47,7 @@ const AuthForm = ({type} : {type:string}) => {
   const [isLoading, setIsLoading] = useState(false)
   const [seePassword, setSeePassword] = useState(false)
   const [message,setMessage] = useState('')
-   const [date, setDate] = React.useState<Date | undefined>(null)
+   const [date, setDate] = React.useState<Date | undefined>("")
   console.log('date',date)
   console.log(usStates.map((us)=>us.code))
 
@@ -104,6 +103,7 @@ const form = useForm<z.infer<typeof formSchema>>({
         password: data.password
       }
 
+      console.log(userData.state)
       const newUser = await signUp(userData)
       if (!newUser) throw new Error("Sign-up failed. Please try again.")
       setUser(newUser)
@@ -135,7 +135,6 @@ const form = useForm<z.infer<typeof formSchema>>({
   }
 }
 
-console.log(usStates.code)
   
     return (
     <section className='auth-form'>
@@ -244,7 +243,7 @@ console.log(usStates.code)
                         format(field.value, "yyyy-MM-dd")                      ) : (
                         <span>Pick a date</span>
                       )}
-                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                      <CalendarIcon className="w-4 h-4 ml-auto opacity-50" />
                     </Button>
                   </FormControl>
                 </PopoverTrigger>
@@ -282,7 +281,7 @@ console.log(usStates.code)
           <button
             type="button"
             onClick={handleSeePassword}
-            className='absolute right-3 top-12 -translate-y-1/2 text-gray-500 hover:text-gray-700'
+            className='absolute text-gray-500 -translate-y-1/2 right-3 top-12 hover:text-gray-700'
           >
             {seePassword ? (
               <VisibilityOutlinedIcon />
@@ -303,7 +302,7 @@ console.log(usStates.code)
           }
         </Button>
 
-       <p className="text-12 text-red-500"> {message && message} </p>
+       <p className="text-red-500 text-12"> {message && message} </p>
         </div>
       </form>
     </Form>
