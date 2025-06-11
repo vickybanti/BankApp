@@ -17,11 +17,14 @@ type SearchParamProps = {
 
 const Home = async ({ searchParams }: SearchParamProps) => {
 
+  
+  const loggedIn = await getLoggedInUser();
+  if (!loggedIn?.$id) redirect('/auth/sign-in');
   const {id} = await searchParams;
   const {page} = await searchParams;
 
-  const loggedIn = await getLoggedInUser();
-  if (!loggedIn) redirect('/auth/sign-in');
+
+  
 
   const accounts = await getAccounts({ userId: loggedIn.$id });
   const accountsData = accounts?.data;

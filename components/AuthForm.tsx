@@ -21,7 +21,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { format } from "date-fns"
+import { format, isValid, parse } from "date-fns"
 import { CalendarIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import {
@@ -47,7 +47,7 @@ const AuthForm = ({type} : {type:string}) => {
   const [isLoading, setIsLoading] = useState(false)
   const [seePassword, setSeePassword] = useState(false)
   const [message,setMessage] = useState('')
-   const [date, setDate] = React.useState<Date | undefined>("")
+   const [date, setDate] = React.useState<Date | undefined>(null)
   console.log('date',date)
   console.log(usStates.map((us)=>us.code))
 
@@ -96,7 +96,7 @@ const form = useForm<z.infer<typeof formSchema>>({
         address1: data.address1!,
         city: data.city!,
         postalCode: data.postalCode!,
-        dateOfBirth: data.dateOfBirth!.toString(),
+        dateOfBirth: data.dateOfBirth!.toString() || dateOfBirth, // Use the dateOfBirth state if available
         state: data.state!,
         ssn: data.ssn!,
         email: data.email,
@@ -127,7 +127,7 @@ const form = useForm<z.infer<typeof formSchema>>({
     }
 
   } catch (error: any) {
-    console.log(error)
+    console.error(error)
     setMessage(error.message || "Something went wrong.")
   } finally {
     setIsLoading(false)
@@ -191,28 +191,28 @@ const form = useForm<z.infer<typeof formSchema>>({
 
 
 
-         <FormField
-  control={form.control}
-  name="state"
-  render={({ field }) => (
-    <FormItem className="flex flex-col">
-      <FormLabel>State</FormLabel>
-      <Select value={field.value} onValueChange={field.onChange}>
-        <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="Select state" />
-        </SelectTrigger>
-        <SelectContent className="bg-white">
-          {usStates.map((state) => (
-            <SelectItem key={state.id} value={state.code}>
-              {state.name}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      <FormMessage />
-    </FormItem>
-  )}
-/>
+              <FormField
+                control={form.control}
+                name="state"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col">
+                    <FormLabel>State</FormLabel>
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger className="w-[180px]">
+                        <SelectValue placeholder="Select state" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-white">
+                        {usStates.map((state) => (
+                          <SelectItem key={state.id} value={state.code}>
+                            {state.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
 
                {/* <FormFields control={form.control} name="state" label="Specific state e.g LA" type="text"/>   */}

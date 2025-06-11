@@ -27,7 +27,7 @@ export const createTransaction = async (transaction: CreateTransactionProps) => 
 
     return JSON.parse(JSON.stringify(newTransaction));
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
 
@@ -57,6 +57,6 @@ export const getTransactionsByBankId = async ({bankId}: getTransactionsByBankIdP
 
     return JSON.parse(JSON.stringify(transactions));
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
