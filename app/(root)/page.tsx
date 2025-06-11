@@ -15,6 +15,9 @@ type SearchParamProps = {
   }>;
 };
 
+export const dynamic = 'force-dynamic';
+
+
 const Home = async ({ searchParams }: SearchParamProps) => {
 
   
@@ -35,7 +38,7 @@ const Home = async ({ searchParams }: SearchParamProps) => {
   const account = await getAccount({ appwriteItemId });
 
   return (
-    <section className="home overflow-hidden">
+    <section className="overflow-hidden home">
       <div className="home-content">
         <header className="home-header">
           <div className='flex items-center gap-3'>
