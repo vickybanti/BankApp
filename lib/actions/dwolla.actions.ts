@@ -80,6 +80,7 @@ export const createDwollaCustomer = async (
       }
     } catch (parseError) {
       // Fallback in case JSON.parse fails
+      console.error(parseError)
       message = err.message || message;
     }
 

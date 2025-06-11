@@ -35,8 +35,6 @@ import {usStates} from '@/constants'
 
 
  
-type ValuePiece = Date | null;
-type Value = ValuePiece | [ValuePiece, ValuePiece];
 
  
 
@@ -47,10 +45,10 @@ const AuthForm = ({type} : {type:string}) => {
   const [isLoading, setIsLoading] = useState(false)
   const [seePassword, setSeePassword] = useState(false)
   const [message,setMessage] = useState('')
-   const [date, setDate] = React.useState<Date | undefined>(null)
-  console.log('date',date)
-  console.log(usStates.map((us)=>us.code))
+  const [open, setOpen] = React.useState(false)
 
+const [dateOfBirth, setDateOfBirth] = useState<string>('')
+ 
   
   const handleSeePassword = () => {
     setSeePassword(!seePassword)
@@ -103,7 +101,6 @@ const form = useForm<z.infer<typeof formSchema>>({
         password: data.password
       }
 
-      console.log(userData.state)
       const newUser = await signUp(userData)
       if (!newUser) throw new Error("Sign-up failed. Please try again.")
       setUser(newUser)
@@ -126,9 +123,14 @@ const form = useForm<z.infer<typeof formSchema>>({
       setIsPlaidLinkOpen(true)
     }
 
-  } catch (error: any) {
-    console.error(error)
-    setMessage(error.message || "Something went wrong.")
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error(error)
+      setMessage(error.message)
+    } else {
+      console.error(error)
+      setMessage("Something went wrong.")
+    }
   } finally {
     setIsLoading(false)
     setIsPlaidLinkOpen(false)
@@ -222,52 +224,64 @@ const form = useForm<z.infer<typeof formSchema>>({
 
 
 
-<FormField
-          control={form.control}
-          name="dateOfBirth"
-          render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel>Date of birth</FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button
-                      variant={"outline"}
-                      className={cn(
-                        "w-[240px] pl-3 text-left font-normal",
-                        !field.value && "text-muted-foreground"
-                      )}
-                    >
-                      
-                      {field.value ? (
-                        format(field.value, "yyyy-MM-dd")                      ) : (
-                        <span>Pick a date</span>
-                      )}
-                      <CalendarIcon className="w-4 h-4 ml-auto opacity-50" />
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0 bg-white" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={field.value}
-                    onSelect={(date) => {
-                      field.onChange(date ? format(date, "yyyy-MM-dd") : "");
-                    }}                   
-                    disabled={(date) =>
-                      date > new Date() || date < new Date("1900-01-01")
-                    }
-                    captionLayout="dropdown"
-                  />
-                </PopoverContent>
-              </Popover>
-              <FormDescription>
-                format:YYYY-MM-DD
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+              <FormField
+                control={form.control}
+                name="dateOfBirth"
+                render={({ field }) => 
+                {
+                  const dateValue = typeof field.value === 'string'?  parse(field.value,"yyyy-MM-dd", new Date()) : undefined;
+                  return (
+                
+                  
+                  <FormItem className="flex flex-col">
+                    <FormLabel>Date of birth</FormLabel>
+                    <Popover open={open} onOpenChange={setOpen}> {/* Control popover open/close state */}
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant={"outline"}
+                            className={cn(
+                              "w-[240px] pl-3 text-left font-normal",
+                              !field.value && "text-muted-foreground"
+                            )}
+                          >
+                            {field.value ? (
+                              // Display the date in a user-friendly format from the stored string
+                              format(field.value, "yyyy-MM-dd") // "PPP" is a friendly date format from date-fns
+                            ) : (
+                              <span>Pick a date</span>
+                            )}
+                            <CalendarIcon className="w-4 h-4 ml-auto opacity-50" />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0 bg-white" align="start">
+                        <Calendar
+                          mode="single"
+                          // The selected prop should receive a Date object.
+                          // Convert the string from field.value back to a Date object for the Calendar.
+                          selected={isValid(dateValue) ? dateValue : undefined}
+                          captionLayout="dropdown"
+                          onSelect={(selectedDate) => { 
+                            if (selectedDate) {
+                              const formatted = format(selectedDate, "yyyy-MM-dd");
+                              setDateOfBirth(formatted);
+                              field.onChange(formatted); // FIXED: send a proper YYYY-MM-DD string
+                            }
+                            setOpen(false);
+                          }}
+
+                          autoFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                    <FormDescription>
+                      format:YYYY-MM-DD
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}}
+              />
 
 
             
@@ -296,6 +310,7 @@ const form = useForm<z.infer<typeof formSchema>>({
           {isLoading ? (
             <>
               <Loader2 size={20} className='animate-spin'/> &nbsp;Loading...
+              {isPlaidLinkOpen && "Plaid loading..."}
             </>
           )
             :(type === 'sign-in' ? 'Sign In' : 'Sign Up') 

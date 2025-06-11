@@ -62,12 +62,16 @@ export const signUp = async ({ password, ...userData }: SignUpParams) => {
         password,
         `${firstName} ${lastName}`
       );
-    } catch (appwriteError: any) {
-      if (appwriteError?.code === 409) {
-        throw new Error("Email already exists. Please use a different email address.");
+    } catch (appwriteError: unknown) {
+      if (appwriteError instanceof Error) {
+        if ((appwriteError as any)?.code === 409) { // Optional: refine this type if you know the shape
+          throw new Error("Email already exists. Please use a different email address.");
+        }
+        throw new Error(appwriteError.message || "Error creating user account.");
       }
-      throw new Error(appwriteError?.message || "Error creating user account.");
+      throw new Error("Unknown error occurred.");
     }
+    
 
     // Step 2: Create Dwolla Customer
     let dwollaCustomerUrl: string | null = null;
@@ -76,10 +80,15 @@ export const signUp = async ({ password, ...userData }: SignUpParams) => {
         ...userData,
         type: "personal",
       });
-    } catch (error: any) {
-  // Try to extract a clean, user-facing error message
-      console.error("Error", error);
-      throw new Error(error);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error("Error", error);
+        throw error;
+      } else {
+        throw new Error("An unknown error occurred.");
+      }
+    
+    
 }
 
 
@@ -114,28 +123,34 @@ export const signUp = async ({ password, ...userData }: SignUpParams) => {
     });
 
     return JSON.parse(JSON.stringify(newUser));
-  } catch (dwollaError: any) {
+  } catch (dwollaError: unknown) {
     // ONLY RETURN THE RAW ERROR MESSAGE
-   let dwollaMessage = "Error creating Dwolla customer.";
-
-  try {
-    // Parse if the error is a stringified JSON
-    const parsedError =
-      typeof dwollaError === "string" ? JSON.parse(dwollaError) : dwollaError;
-
-    const embeddedErrors = parsedError?._embedded?.errors;
-    if (Array.isArray(embeddedErrors) && embeddedErrors.length > 0) {
-      dwollaMessage = embeddedErrors[0]?.message || parsedError?.message;
-    } else if (parsedError?.message) {
-      dwollaMessage = parsedError.message;
+    let dwollaMessage = "Error creating Dwolla customer.";
+  
+    try {
+      // Parse if the error is a stringified JSON
+      const parsedError =
+        typeof dwollaError === "string" ? JSON.parse(dwollaError) : dwollaError;
+  
+      const embeddedErrors = (parsedError as any)?._embedded?.errors;
+  
+      if (Array.isArray(embeddedErrors) && embeddedErrors.length > 0) {
+        dwollaMessage = embeddedErrors[0]?.message || (parsedError as any)?.message;
+      } else if ((parsedError as any)?.message) {
+        dwollaMessage = (parsedError as any).message;
+      }
+    } catch {
+      // Fallback in case parsing fails
+      if (dwollaError instanceof Error) {
+        dwollaMessage = dwollaError.message;
+      } else if (typeof dwollaError === "object" && dwollaError !== null && "message" in dwollaError) {
+        dwollaMessage = String((dwollaError as { message?: string }).message);
+      }
     }
-  } catch (parseErr) {
-    // Fallback in case parsing fails
-    dwollaMessage = dwollaError?.message || dwollaMessage;
+  
+    throw new Error(dwollaMessage);
   }
-
-  throw new Error(dwollaMessage);
-}
+  
 };
 
 // ... your initilization functions
