@@ -41,7 +41,6 @@ import {usStates} from '@/constants'
 const AuthForm = ({type} : {type:string}) => {
  const router = useRouter()
   const [user,setUser] = useState(null)
-  const [isPlaidLinkOpen, setIsPlaidLinkOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [seePassword, setSeePassword] = useState(false)
   const [message,setMessage] = useState('')
@@ -119,9 +118,7 @@ const form = useForm<z.infer<typeof formSchema>>({
       router.push('/')
     } 
     
-    else if (type === 'link-account') {
-      setIsPlaidLinkOpen(true)
-    }
+   
 
   } catch (error: unknown) {
     if (error instanceof Error) {
@@ -133,7 +130,6 @@ const form = useForm<z.infer<typeof formSchema>>({
     }
   } finally {
     setIsLoading(false)
-    setIsPlaidLinkOpen(false)
   }
 }
 
@@ -310,7 +306,6 @@ const form = useForm<z.infer<typeof formSchema>>({
           {isLoading ? (
             <>
               <Loader2 size={20} className='animate-spin'/> &nbsp;Loading...
-              {isPlaidLinkOpen && "Plaid loading..."}
             </>
           )
             :(type === 'sign-in' ? 'Sign In' : 'Sign Up') 

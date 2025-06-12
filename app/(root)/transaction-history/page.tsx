@@ -83,14 +83,28 @@ const TransactionHistory = async ({searchParams}:SearchParamProps) => {
         </div>
       </div>
       <section className='flex-col w-full gap-6 fkex'>
-        <TransactionsTable transactions={currentTransaction}/>
-        {totalPages > 1 && (
-          <div className="w-full my-4">
-              <Pagination totalPages={totalPages} page={currentPage}/>
-          </div>
-        )}
-      
-      </section>
+  {currentTransaction && currentTransaction.length > 0 ? (
+    <>
+      <TransactionsTable transactions={currentTransaction} />
+      {totalPages > 1 && (
+        <div className="w-full my-4">
+          <Pagination totalPages={totalPages} page={currentPage} />
+        </div>
+      )}
+    </>
+  ) : (
+    <div className="flex flex-col items-center justify-center mt-8 space-y-4 text-center">
+      <p className="text-lg font-semibold text-white">No transactions found.</p>
+      <a
+        href="/link-bank" // 🔁 Update this path based on your actual link-bank page
+        className="text-blue-500 underline hover:text-blue-400"
+      >
+        Link a bank account to get started
+      </a>
+    </div>
+  )}
+</section>
+
     </div>
   )
 }
