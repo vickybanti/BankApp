@@ -4,6 +4,8 @@ import TransactionsTable from '@/components/TransactionsTable';
 import { getAccount, getAccounts } from '@/lib/actions/bank.actions';
 import { getLoggedInUser } from '@/lib/actions/user.actions';
 import { formatAmount } from '@/lib/utils';
+import Image from 'next/image';
+import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import React from 'react'
 
@@ -95,12 +97,18 @@ const TransactionHistory = async ({searchParams}:SearchParamProps) => {
   ) : (
     <div className="flex flex-col items-center justify-center mt-8 space-y-4 text-center">
       <p className="text-lg font-semibold text-white">No transactions found.</p>
-      <a
+      <div className='flex-col gap-6'>
+      <Image src="link.jpg"
+      alt="link"
+      fill
+      />
+      <Link
         href="/link-bank" // 🔁 Update this path based on your actual link-bank page
         className="text-blue-500 underline hover:text-blue-400"
       >
         Link a bank account to get started
-      </a>
+      </Link>
+      </div>
     </div>
   )}
 </section>
