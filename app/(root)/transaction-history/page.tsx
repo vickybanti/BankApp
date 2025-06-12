@@ -15,7 +15,6 @@ type SearchParamProps = {
   }>;
 };
 
-export const dynamic = 'force-dynamic';
 
 const TransactionHistory = async ({searchParams}:SearchParamProps) => {
   
