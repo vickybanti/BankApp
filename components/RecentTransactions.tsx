@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import React from 'react'
+import React, { useState } from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { BankTabItem } from './BankTabItem'
 import BankInfo from './BankInfo'
@@ -14,8 +14,6 @@ const RecentTransactions = ({accounts,
     page=1
 }:RecentTransactionsProps) => {
 
-    console.log('transactions', transactions)
-    console.log('accounts', accounts)
     const rowsPerPage = 10
     const totalPages = Math.ceil(transactions.length/rowsPerPage)
 

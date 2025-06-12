@@ -10,6 +10,7 @@ import {
   getAccountTypeColors,
 } from "@/lib/utils";
 import { AccountTypes, BankInfoProps } from "@/types";
+import { useState } from "react";
 
 const BankInfo = ({ account, appwriteItemId, type }: BankInfoProps) => {
   const router = useRouter();
@@ -23,6 +24,7 @@ const BankInfo = ({ account, appwriteItemId, type }: BankInfoProps) => {
       key: "id",
       value: account?.appwriteItemId,
     });
+
     router.push(newUrl, { scroll: false });
   };
 
@@ -48,7 +50,7 @@ const BankInfo = ({ account, appwriteItemId, type }: BankInfoProps) => {
           className="m-2 min-w-5"
         />
       </figure>
-      <div className="flex w-full flex-1 flex-col justify-center gap-1">
+      <div className="flex flex-col justify-center flex-1 w-full gap-1">
         <div className="bank-info_content">
           <h2
             className={`text-16 line-clamp-1 flex-1 font-bold text-blue-900 ${colors.title}`}
