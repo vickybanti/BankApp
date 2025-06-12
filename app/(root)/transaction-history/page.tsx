@@ -1,9 +1,11 @@
 import HeaderBox from '@/components/HeaderBox'
 import { Pagination } from '@/components/Pagination';
+import PlaidLink from '@/components/PlaidLink';
 import TransactionsTable from '@/components/TransactionsTable';
 import { getAccount, getAccounts } from '@/lib/actions/bank.actions';
 import { getLoggedInUser } from '@/lib/actions/user.actions';
 import { formatAmount } from '@/lib/utils';
+import { SiderbarProps } from '@/types';
 import Image from 'next/image';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
@@ -18,7 +20,7 @@ type SearchParamProps = {
 };
 
 
-const TransactionHistory = async ({searchParams}:SearchParamProps) => {
+const TransactionHistory = async ({searchParams}:SearchParamProps,{user}:SiderbarProps) => {
   
   const {id,page} = await searchParams;
 
@@ -97,19 +99,21 @@ const TransactionHistory = async ({searchParams}:SearchParamProps) => {
   ) : (
     <div className="flex flex-col items-center justify-center mt-8 space-y-4 text-center">
       <p className="text-lg font-semibold text-white">No transactions found.</p>
-      <div className='flex-col gap-6'>
+      <div className='flex-col items-center gap-6'>
       <Image src="link.jpg"
       alt="link"
-      width={80}
-      height={80}
+      width={200}
+      height={250}
       className='items-center'
       />
-      <Link
-        href="/link-bank" // 🔁 Update this path based on your actual link-bank page
-        className="text-blue-500 underline hover:text-blue-400"
-      >
-        Link a bank account to get started
-      </Link>
+     <Link href="/" className="flex gap-2">
+                <Image src="/icons/plus.svg"
+                 alt="add bank" 
+                 width={20}
+                  height={20} />
+                            <PlaidLink user={user} />
+
+            </Link>
       </div>
     </div>
   )}
