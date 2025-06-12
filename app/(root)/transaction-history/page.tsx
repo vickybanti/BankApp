@@ -100,7 +100,9 @@ const TransactionHistory = async ({searchParams}:SearchParamProps) => {
       <div className='flex-col gap-6'>
       <Image src="link.jpg"
       alt="link"
-      fill
+      width={80}
+      height={80}
+      className='items-center'
       />
       <Link
         href="/link-bank" // 🔁 Update this path based on your actual link-bank page
