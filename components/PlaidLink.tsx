@@ -19,7 +19,6 @@ const PlaidLink = ({user, variant} :PlaidLinkProps) => {
         }
         getLinkToken();
     },[user]); 
-    console.log('token', token)
 
     const onSuccess =useCallback<PlaidLinkOnSuccess>(async(public_token: string) => {
         await exchangePublicToken({
