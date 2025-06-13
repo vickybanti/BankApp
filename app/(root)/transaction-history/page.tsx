@@ -1,11 +1,9 @@
 import HeaderBox from '@/components/HeaderBox'
 import { Pagination } from '@/components/Pagination';
-import PlaidLink from '@/components/PlaidLink';
 import TransactionsTable from '@/components/TransactionsTable';
 import { getAccount, getAccounts } from '@/lib/actions/bank.actions';
 import { getLoggedInUser } from '@/lib/actions/user.actions';
 import { formatAmount } from '@/lib/utils';
-import { SiderbarProps } from '@/types';
 import Image from 'next/image';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
