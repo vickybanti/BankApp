@@ -20,7 +20,7 @@ type SearchParamProps = {
 };
 
 
-const TransactionHistory = async ({searchParams}:SearchParamProps,{user}:SiderbarProps) => {
+const TransactionHistory = async ({searchParams}:SearchParamProps) => {
   
 
   const loggedIn = await getLoggedInUser();
@@ -111,8 +111,9 @@ const TransactionHistory = async ({searchParams}:SearchParamProps,{user}:Siderba
                  alt="add bank" 
                  width={20}
                   height={20} />
-                            <PlaidLink user={user} />
-
+                <span className="text-blue-500 hover:text-blue-400">
+                    Link a bank account 
+                </span>
             </Link>
       </div>
     </div>
