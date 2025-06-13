@@ -19,11 +19,9 @@ type SearchParamProps = {
   }>;
 };
 
-export const dynamic = 'force-dynamic'; // ensure SSR
 
 const TransactionHistory = async ({searchParams}:SearchParamProps,{user}:SiderbarProps) => {
   
-  const {id,page} = await searchParams;
 
   const loggedIn = await getLoggedInUser();
   
@@ -31,7 +29,8 @@ const TransactionHistory = async ({searchParams}:SearchParamProps,{user}:Siderba
     if (!loggedIn || !loggedIn.$id) {
       redirect('/sign-in')
     }
-  
+    const {id,page} = await searchParams;
+
     const currentPage = Number(page as string) || 1
   
     const accounts = await getAccounts({ 
