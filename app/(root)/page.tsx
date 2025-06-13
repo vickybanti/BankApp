@@ -15,6 +15,8 @@ type SearchParamProps = {
   }>;
 };
 
+export const dynamic = 'force-dynamic'; // ensure SSR
+
 const Home = async ({ searchParams }: SearchParamProps) => {
 
   
@@ -27,6 +29,8 @@ const Home = async ({ searchParams }: SearchParamProps) => {
   
 
   const accounts = await getAccounts({ userId: loggedIn.$id });
+  if(!accounts) return;
+
   const accountsData = accounts?.data;
 
   const currentPage = Number(page) || 1;
@@ -35,7 +39,7 @@ const Home = async ({ searchParams }: SearchParamProps) => {
   const account = await getAccount({ appwriteItemId });
 
   return (
-    <section className="home overflow-hidden">
+    <section className="overflow-hidden home">
       <div className="home-content">
         <header className="home-header">
           <div className='flex items-center gap-3'>

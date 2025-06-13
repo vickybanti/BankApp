@@ -15,6 +15,18 @@ const {APPWRITE_DATABASE_ID:DATABASE_ID,
   APPWRITE_BANK_COLLECTION_ID:BANK_COLLECTION_ID
 } = process.env
 
+interface DwollaEmbeddedError {
+  message?: string;
+}
+
+interface DwollaError {
+  message?: string;
+  _embedded?: {
+    errors?: DwollaEmbeddedError[];
+  };
+}
+
+
 //get user from database
 export const getUserInfo = async ({userId}:getUserInfoProps) => {
    try {
@@ -62,12 +74,17 @@ export const signUp = async ({ password, ...userData }: SignUpParams) => {
         password,
         `${firstName} ${lastName}`
       );
-    } catch (appwriteError: any) {
-      if (appwriteError?.code === 409) {
-        throw new Error("Email already exists. Please use a different email address.");
+    } catch (appwriteError: unknown) {
+      if (appwriteError instanceof Error) {
+        if ("code" in appwriteError && appwriteError.code === 409) {
+          throw new Error("Email already exists. Please use a different email address.");
+        }
+        
+        throw new Error(appwriteError.message || "Error creating user account.");
       }
-      throw new Error(appwriteError?.message || "Error creating user account.");
+      throw new Error("Unknown error occurred.");
     }
+    
 
     // Step 2: Create Dwolla Customer
     let dwollaCustomerUrl: string | null = null;
@@ -76,10 +93,15 @@ export const signUp = async ({ password, ...userData }: SignUpParams) => {
         ...userData,
         type: "personal",
       });
-    } catch (error: any) {
-  // Try to extract a clean, user-facing error message
-      console.error("Error", error);
-      throw new Error(error);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error("Error", error);
+        throw error;
+      } else {
+        throw new Error("An unknown error occurred.");
+      }
+    
+    
 }
 
 
@@ -114,28 +136,35 @@ export const signUp = async ({ password, ...userData }: SignUpParams) => {
     });
 
     return JSON.parse(JSON.stringify(newUser));
-  } catch (dwollaError: any) {
+  } catch (dwollaError: unknown) {
     // ONLY RETURN THE RAW ERROR MESSAGE
-   let dwollaMessage = "Error creating Dwolla customer.";
-
-  try {
-    // Parse if the error is a stringified JSON
-    const parsedError =
-      typeof dwollaError === "string" ? JSON.parse(dwollaError) : dwollaError;
-
-    const embeddedErrors = parsedError?._embedded?.errors;
-    if (Array.isArray(embeddedErrors) && embeddedErrors.length > 0) {
-      dwollaMessage = embeddedErrors[0]?.message || parsedError?.message;
-    } else if (parsedError?.message) {
-      dwollaMessage = parsedError.message;
+    let dwollaMessage = "Error creating Dwolla customer.";
+  
+    try {
+      // Parse if the error is a stringified JSON
+      const parsedError:DwollaError  =
+      typeof dwollaError === "string" ? JSON.parse(dwollaError) : dwollaError as DwollaError;
+  
+      const embeddedErrors = parsedError._embedded?.errors;
+  
+      if (Array.isArray(embeddedErrors) && embeddedErrors.length > 0) {
+        dwollaMessage = embeddedErrors[0]?.message || parsedError.message || dwollaMessage;
+      } else if (parsedError.message) {
+        dwollaMessage = parsedError.message;
+      }
+      
+    } catch {
+      // Fallback in case parsing fails
+      if (dwollaError instanceof Error) {
+        dwollaMessage = dwollaError.message;
+      } else if (typeof dwollaError === "object" && dwollaError !== null && "message" in dwollaError) {
+        dwollaMessage = String((dwollaError as { message?: string }).message);
+      }
     }
-  } catch (parseErr) {
-    // Fallback in case parsing fails
-    dwollaMessage = dwollaError?.message || dwollaMessage;
+  
+    throw new Error(dwollaMessage);
   }
-
-  throw new Error(dwollaMessage);
-}
+  
 };
 
 // ... your initilization functions
@@ -143,26 +172,38 @@ export const signUp = async ({ password, ...userData }: SignUpParams) => {
 export async function getLoggedInUser() {
   try {
     const { account } = await createSessionClient();
-    const result =  await account.get();
+    const result = await account.get();
 
-    const user = await getUserInfo({userId: result.$id})
-    return JSON.parse(JSON.stringify(user))
+    const user = await getUserInfo({ userId: result.$id})
+
+    return JSON.parse(JSON.stringify(user));
   } catch (error) {
-    console.error(error)
-    throw new Error((error instanceof Error ? error.message : "Erro signing in."))
+    console.log(error)
+    return null;
   }
 }
 
+
 export const logoutAccount = async () => {
-    try{
-        const { account } = await createSessionClient();
-        (await cookies()).delete("appwrite-session")
-        await account.deleteSession("current");
-    } catch (error) {
-          console.error(error)
-        return null;
+  try {
+    const sessionClient = await createSessionClient();
+
+    if (!sessionClient) {
+      throw new Error("No session client found.");
     }
-}
+
+    const { account } = sessionClient;
+
+    // Delete the session cookie
+    (await cookies()).delete("appwrite-session");
+
+    // Log out from Appwrite
+    await account.deleteSession("current");
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
 
 export const createLinkToken = async (user: User) => {
     try {

@@ -35,21 +35,17 @@ import {usStates} from '@/constants'
 
 
  
-type ValuePiece = Date | null;
-type Value = ValuePiece | [ValuePiece, ValuePiece];
 
  
 
 const AuthForm = ({type} : {type:string}) => {
  const router = useRouter()
   const [user,setUser] = useState(null)
-  const [isPlaidLinkOpen, setIsPlaidLinkOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [seePassword, setSeePassword] = useState(false)
   const [message,setMessage] = useState('')
   const [open, setOpen] = React.useState(false)
 
-const [date, setDate] = React.useState<Date | undefined>(undefined); 
 const [dateOfBirth, setDateOfBirth] = useState<string>('')
  
   
@@ -122,16 +118,18 @@ const form = useForm<z.infer<typeof formSchema>>({
       router.push('/')
     } 
     
-    else if (type === 'link-account') {
-      setIsPlaidLinkOpen(true)
-    }
+   
 
-  } catch (error: any) {
-    console.error(error)
-    setMessage(error.message || "Something went wrong.")
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error(error)
+      setMessage(error.message)
+    } else {
+      console.error(error)
+      setMessage("Something went wrong.")
+    }
   } finally {
     setIsLoading(false)
-    setIsPlaidLinkOpen(false)
   }
 }
 
@@ -249,7 +247,7 @@ const form = useForm<z.infer<typeof formSchema>>({
                             ) : (
                               <span>Pick a date</span>
                             )}
-                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                            <CalendarIcon className="w-4 h-4 ml-auto opacity-50" />
                           </Button>
                         </FormControl>
                       </PopoverTrigger>
@@ -293,7 +291,7 @@ const form = useForm<z.infer<typeof formSchema>>({
           <button
             type="button"
             onClick={handleSeePassword}
-            className='absolute right-3 top-12 -translate-y-1/2 text-gray-500 hover:text-gray-700'
+            className='absolute text-gray-500 -translate-y-1/2 right-3 top-12 hover:text-gray-700'
           >
             {seePassword ? (
               <VisibilityOutlinedIcon />
@@ -314,7 +312,7 @@ const form = useForm<z.infer<typeof formSchema>>({
           }
         </Button>
 
-       <p className="text-12 text-red-500"> {message && message} </p>
+       <p className="text-red-500 text-12"> {message && message} </p>
         </div>
       </form>
     </Form>

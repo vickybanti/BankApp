@@ -49,7 +49,7 @@
 
 @layer utilities {
   .input-class {
-    @apply text-16 placeholder:text-16 rounded-lg border border-gray-300 text-gray-900 placeholder:text-gray-500;
+    @apply text-gray-900 border border-gray-300 rounded-lg text-16 placeholder:text-16 placeholder:text-gray-500;
   }
 
   .sheet-content button {
@@ -65,7 +65,7 @@
   }
 
   .header-2 {
-    @apply text-18 font-semibold text-gray-900;
+    @apply font-semibold text-gray-900 text-18;
   }
 
   .text-10 {
@@ -110,11 +110,11 @@
 
   /* Home */
   .home {
-    @apply no-scrollbar flex w-full flex-row max-xl:max-h-screen max-xl:overflow-y-scroll;
+    @apply flex flex-row w-full no-scrollbar max-xl:max-h-screen max-xl:overflow-y-scroll;
   }
 
   .home-content {
-    @apply no-scrollbar flex w-full flex-1 flex-col gap-8 px-5 sm:px-8 py-7 lg:py-12 xl:max-h-screen xl:overflow-y-scroll;
+    @apply flex flex-col flex-1 w-full gap-8 px-5 no-scrollbar sm:px-8 py-7 lg:py-12 xl:max-h-screen xl:overflow-y-scroll;
   }
 
   .home-header {
@@ -122,7 +122,7 @@
   }
 
   .total-balance {
-    @apply flex w-full items-center gap-4 rounded-xl border border-gray-200 p-4 shadow-chart sm:gap-6 sm:p-6;
+    @apply flex items-center w-full gap-4 p-4 border border-gray-200 rounded-xl shadow-chart sm:gap-6 sm:p-6;
   }
 
   .total-balance-chart {
@@ -130,15 +130,15 @@
   }
 
   .total-balance-label {
-    @apply text-14 font-medium text-gray-600;
+    @apply font-medium text-gray-600 text-14;
   }
 
   .total-balance-amount {
-    @apply text-24 lg:text-30 flex-1 font-semibold text-gray-900;
+    @apply flex-1 font-semibold text-gray-900 text-24 lg:text-30;
   }
 
   .recent-transactions {
-    @apply flex w-full flex-col gap-6;
+    @apply flex flex-col w-full gap-6;
   }
 
   .view-all-btn {
@@ -146,20 +146,20 @@
   }
 
   .recent-transactions {
-    @apply flex w-full flex-col gap-6;
+    @apply flex flex-col w-full gap-6;
   }
 
   .recent-transactions-label {
-    @apply text-20 md:text-24 font-semibold text-gray-900;
+    @apply font-semibold text-gray-900 text-20 md:text-24;
   }
 
   .recent-transactions-tablist {
-    @apply custom-scrollbar mb-8 flex w-full flex-nowrap;
+    @apply flex w-full mb-8 custom-scrollbar flex-nowrap;
   }
 
   /* Right sidebar */
   .right-sidebar {
-    @apply no-scrollbar hidden h-screen max-h-screen flex-col border-l border-gray-200 xl:flex w-[355px] xl:overflow-y-scroll !important;
+    @apply no-scrollbar hidden sticky h-screen max-h-screen flex-col border-l border-gray-200 xl:flex w-[355px] xl:overflow-y-scroll !important;
   }
 
   .profile-banner {
@@ -171,7 +171,7 @@
   }
 
   .profile-img {
-    @apply flex-center absolute -top-8 size-24 rounded-full bg-gray-100 border-8 border-white p-2 shadow-profile;
+    @apply absolute p-2 bg-gray-100 border-8 border-white rounded-full flex-center -top-8 size-24 shadow-profile;
   }
 
   .profile-details {
@@ -179,11 +179,11 @@
   }
 
   .profile-name {
-    @apply text-24 font-semibold text-gray-900;
+    @apply font-semibold text-gray-900 text-24;
   }
 
   .profile-email {
-    @apply text-16 font-normal text-gray-600;
+    @apply font-normal text-gray-600 text-16;
   }
 
   .banks {
@@ -192,24 +192,24 @@
 
   /* My Banks */
   .my-banks {
-    @apply flex h-screen max-h-screen w-full flex-col gap-8 bg-gray-25 p-8 xl:py-12;
+    @apply flex flex-col w-full h-screen max-h-screen gap-8 p-8 bg-gray-25 xl:py-12;
   }
 
   /* My Banks */
   .transactions {
-    @apply flex max-h-screen w-full flex-col gap-8 overflow-y-scroll bg-gray-25 p-8 xl:py-12;
+    @apply flex flex-col w-full max-h-screen gap-8 p-8 overflow-y-scroll bg-gray-25 xl:py-12;
   }
 
   .transactions-header {
-    @apply flex w-full flex-col items-start justify-between gap-8 md:flex-row;
+    @apply flex flex-col items-start justify-between w-full gap-8 md:flex-row;
   }
 
   .transactions-account {
-    @apply flex flex-col justify-between gap-4 rounded-lg border-y bg-blue-600 px-4 py-5 md:flex-row;
+    @apply flex flex-col justify-between gap-4 px-4 py-5 bg-blue-600 rounded-lg border-y md:flex-row;
   }
 
   .transactions-account-balance {
-    @apply flex-center flex-col  gap-2 rounded-md bg-blue-25/20 px-4 py-2 text-white;
+    @apply flex-col gap-2 px-4 py-2 text-white rounded-md flex-center bg-blue-25/20;
   }
 
   .header-box {
@@ -217,11 +217,11 @@
   }
 
   .header-box-title {
-    @apply text-24 lg:text-30 font-semibold text-gray-900;
+    @apply font-semibold text-gray-900 text-24 lg:text-30;
   }
 
   .header-box-subtext {
-    @apply text-14 lg:text-16 font-normal text-gray-600;
+    @apply font-normal text-gray-600 text-14 lg:text-16;
   }
 
   /* Bank Card */
@@ -268,11 +268,11 @@
 
   /* PlaidLink */
   .plaidlink-primary {
-    @apply text-16 rounded-lg border border-bankGradient bg-bank-gradient font-semibold text-white shadow-form;
+    @apply font-semibold text-white border rounded-lg text-16 border-bankGradient bg-bank-gradient shadow-form;
   }
 
   .plaidlink-ghost {
-    @apply flex cursor-pointer items-center justify-center gap-3 rounded-lg px-3 py-7 hover:bg-white lg:justify-start;
+    @apply flex items-center justify-center gap-3 px-3 rounded-lg cursor-pointer py-7 hover:bg-white lg:justify-start;
   }
 
   .plaidlink-default {
@@ -281,7 +281,7 @@
 
   /* Auth */
   .auth-asset {
-    @apply flex h-screen w-full sticky top-0 items-center justify-end bg-sky-1 max-lg:hidden;
+    @apply sticky top-0 flex items-center justify-end w-full h-screen bg-sky-1 max-lg:hidden;
   }
 
   /* Auth Form */
@@ -298,20 +298,20 @@
   }
 
   .form-message {
-    @apply text-12 text-red-500;
+    @apply text-red-500 text-12;
   }
 
   .form-btn {
-    @apply text-16 rounded-lg border border-bankGradient bg-bank-gradient font-semibold text-white shadow-form;
+    @apply font-semibold text-white border rounded-lg text-16 border-bankGradient bg-bank-gradient shadow-form;
   }
 
   .form-link {
-    @apply text-14 cursor-pointer font-medium text-bankGradient;
+    @apply font-medium cursor-pointer text-14 text-bankGradient;
   }
 
   /* Payment Transfer */
   .payment-transfer {
-    @apply no-scrollbar flex flex-col overflow-y-scroll bg-gray-25 p-8 md:max-h-screen xl:py-12;
+    @apply flex flex-col p-8 overflow-y-scroll no-scrollbar bg-gray-25 md:max-h-screen xl:py-12;
   }
 
   .payment-transfer_form-item {
@@ -323,7 +323,7 @@
   }
 
   .payment-transfer_form-details {
-    @apply flex flex-col gap-1 border-t border-gray-200 pb-5 pt-6;
+    @apply flex flex-col gap-1 pt-6 pb-5 border-t border-gray-200;
   }
 
   .payment-transfer_btn-box {
@@ -336,33 +336,33 @@
 
   /* Root Layout */
   .root-layout {
-    @apply flex h-16 items-center justify-between p-5 shadow-creditCard sm:p-8 md:hidden;
+    @apply flex items-center justify-between h-16 p-5 shadow-creditCard sm:p-8 md:hidden;
   }
 
   /* Bank Info */
   .bank-info_content {
-    @apply flex flex-1 items-center justify-between gap-2 overflow-hidden;
+    @apply flex items-center justify-between flex-1 gap-2 overflow-hidden;
   }
 
   /* Footer */
   .footer {
-    @apply flex cursor-pointer items-center justify-between gap-2 py-6;
+    @apply flex items-center justify-between gap-2 py-6 cursor-pointer;
   }
 
   .footer_name {
-    @apply flex size-10 items-center justify-center rounded-full bg-gray-200 max-xl:hidden;
+    @apply flex items-center justify-center bg-gray-200 rounded-full size-10 max-xl:hidden;
   }
 
   .footer_email {
-    @apply flex flex-1 flex-col justify-center max-xl:hidden;
+    @apply flex flex-col justify-center flex-1 max-xl:hidden;
   }
 
   .footer_name-mobile {
-    @apply flex size-10 items-center justify-center rounded-full bg-gray-200;
+    @apply flex items-center justify-center bg-gray-200 rounded-full size-10;
   }
 
   .footer_email-mobile {
-    @apply flex flex-1 flex-col justify-center;
+    @apply flex flex-col justify-center flex-1;
   }
 
   .footer_image {
@@ -383,11 +383,11 @@
   }
 
   .sidebar-link {
-    @apply flex gap-3 items-center py-1 md:p-3 2xl:p-4 rounded-lg justify-center xl:justify-start;
+    @apply flex items-center justify-center gap-3 py-1 rounded-lg md:p-3 2xl:p-4 xl:justify-start;
   }
 
   .sidebar-label {
-    @apply text-16 font-semibold text-black-2 max-xl:hidden;
+    @apply font-semibold text-16 text-black-2 max-xl:hidden;
   }
 }
 

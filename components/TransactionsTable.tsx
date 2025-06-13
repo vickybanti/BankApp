@@ -34,7 +34,7 @@ const CategoryBagde = ({category}:CategoryBadgeProps) => {
 
 const TransactionsTable = ({transactions}:TransactionTableProps) => {
   return (
-      <Table className='!border-DEFAULT !border-t-0 !border-b-0 overflow-x-auto'>
+      <Table className='!border-DEFAULT !border-t-0 !border-b-0'>
         <TableHeader className='bg-[#f9fafb]'>
             <TableRow>
             <TableHead className="px-2">Transactions</TableHead>

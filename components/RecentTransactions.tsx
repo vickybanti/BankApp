@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import React from 'react'
+import React, { useState } from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { BankTabItem } from './BankTabItem'
 import BankInfo from './BankInfo'
@@ -14,7 +14,10 @@ const RecentTransactions = ({accounts,
     page=1
 }:RecentTransactionsProps) => {
 
+<<<<<<< HEAD
     
+=======
+>>>>>>> 91155c6a17975526affe8f46a438d442e4f42151
     const rowsPerPage = 10
     const totalPages = Math.ceil(transactions.length/rowsPerPage)
 
@@ -49,24 +52,39 @@ const RecentTransactions = ({accounts,
                     ))}
                 </TabsList>
                 {accounts.map((account:Account) => (
-                    <TabsContent key={account.id} 
-                    value={account.appwriteItemId}
-                    className="space-y-4"
-                    >
-                        <BankInfo 
-                        account={account}
-                        appwriteItemId={appwriteItemId}
-                        type="full"/>
+ <TabsContent
+ key={account.id}
+ value={account.appwriteItemId}
+ className="space-y-4"
+>
+ <BankInfo 
+   account={account}
+   appwriteItemId={appwriteItemId}
+   type="full"
+ />
 
-                        <TransactionsTable 
-                        transactions={currentTransaction}
-                        />
-                        {totalPages > 1 && (
-                            <div className="my-4 w-full">
-                                <Pagination totalPages={totalPages} page={page}/>
-                           </div>
-                        )}
-                    </TabsContent>
+ {currentTransaction && currentTransaction.length > 0 ? (
+   <>
+     <TransactionsTable transactions={currentTransaction} />
+     {totalPages > 1 && (
+       <div className="w-full my-4">
+         <Pagination totalPages={totalPages} page={page} />
+       </div>
+     )}
+   </>
+ ) : (
+   <div className="mt-6 space-y-3 text-center">
+     <p className="font-medium text-white">No transactions available</p>
+     <Link
+       href="/link-bank"
+       className="text-blue-500 underline hover:text-blue-400"
+     >
+       Link a bank account
+     </Link>
+   </div>
+ )}
+</TabsContent>
+
                 ))}
                 
                             </Tabs>
