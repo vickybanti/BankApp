@@ -19,6 +19,7 @@ type SearchParamProps = {
   }>;
 };
 
+export const dynamic = 'force-dynamic'; // ensure SSR
 
 const TransactionHistory = async ({searchParams}:SearchParamProps,{user}:SiderbarProps) => {
   
