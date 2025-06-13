@@ -10,7 +10,6 @@ import {
   getAccountTypeColors,
 } from "@/lib/utils";
 import { AccountTypes, BankInfoProps } from "@/types";
-import { useState } from "react";
 
 const BankInfo = ({ account, appwriteItemId, type }: BankInfoProps) => {
   const router = useRouter();
