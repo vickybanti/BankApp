@@ -13,6 +13,7 @@ import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import Footer from './Footer'
 import { MobileNavProps } from '@/types'
+import PlaidLink from './PlaidLink'
 
 
 const MobileNav = ({user}:MobileNavProps) => {
@@ -61,17 +62,22 @@ const MobileNav = ({user}:MobileNavProps) => {
                                 width={20}
                                 height={20}
                                 className={cn({'brightness-[3] invert-0': isActive})}
-                            />
+                                  />
                            <p className={cn('text-16 font-semibold text-black-2', {'text-white':isActive})}> {link.label} </p>
                         </Link>
                         </SheetClose>
                     )
                 })}
+
+                <div className='my-2'>
+                 <PlaidLink user={user} />
+                </div>
+                
+        <Footer user={user} type="mobile"/>
             
                  </nav>
         </SheetClose>
 
-        <Footer user={user} type="mobile"/>
                         </div>
 
 

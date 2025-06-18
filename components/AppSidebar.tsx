@@ -20,7 +20,7 @@ const AppSidebar = ({user}:SiderbarProps) => {
     const pathname= usePathname()
   return (
 
-    <Sidebar collapsible="icon" variant="inset">
+    <Sidebar collapsible="icon" variant="inset" className='max-md:hidden'>
       <SidebarContent className='ml-2'>
         
              <Link
