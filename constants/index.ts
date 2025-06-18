@@ -5,21 +5,25 @@ export const sidebarLinks = [
     icon: Home,
     route: "/",
     label: "Home",
+    imgURL: "/icons/home.svg",
   },
   {
     icon: CircleDollarSign,
     route: "/my-banks",
     label: "My Banks",
+    imgURL: "/icons/dollar-circle.svg",
   },
   {
     icon: ArrowRightLeft,
     route: "/transaction-history",
     label: "Transaction History",
+    imgURL: "/icons/transaction.svg",
   },
   {
     icon:Send,
     route: "/payment-transfer",
     label: "Transfer Funds",
+    imgURL:'/icons/bank-transfer.svg',
   },
 ];
 
