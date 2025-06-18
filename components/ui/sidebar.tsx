@@ -3,7 +3,7 @@
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { VariantProps, cva } from "class-variance-authority"
-import { PanelLeft } from "lucide-react"
+import { ArrowRightToLine  } from "lucide-react"
 
 import { useIsMobile } from "@/hooks/use-mobile"
 import { cn } from "@/lib/utils"
@@ -200,6 +200,7 @@ const Sidebar = React.forwardRef<
 
     if (isMobile) {
       return (
+        <div className="hidden">
         <Sheet open={openMobile} onOpenChange={setOpenMobile} {...props}>
           <SheetContent
             data-sidebar="sidebar"
@@ -219,6 +220,7 @@ const Sidebar = React.forwardRef<
             <div className="flex h-full w-full flex-col">{children}</div>
           </SheetContent>
         </Sheet>
+        </div>
       )
     }
 
@@ -274,21 +276,23 @@ const SidebarTrigger = React.forwardRef<
   React.ComponentProps<typeof Button>
 >(({ className, onClick, ...props }, ref) => {
   const { toggleSidebar } = useSidebar()
+  const [open, setOpen] = React.useState(false)
 
   return (
     <Button
       ref={ref}
       data-sidebar="trigger"
       variant="ghost"
-      size="icon"
-      className={cn("h-7 w-7", className)}
+      className={cn("h-7 w-7 max-md:hidden mt-4", className)}
+      size="lg"
       onClick={(event) => {
         onClick?.(event)
         toggleSidebar()
+        setOpen((prev) => !prev)
       }}
       {...props}
     >
-      <PanelLeft />
+     {open ? (<ArrowRightToLine className="h-16 w-16"/>) : (<ArrowRightToLine className="rotate-180" />)}
       <span className="sr-only">Toggle Sidebar</span>
     </Button>
   )
