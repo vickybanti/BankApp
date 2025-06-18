@@ -1,5 +1,6 @@
 import React from 'react'
 import { FooterProps } from '@/types'
+import Logout from './Logout'
 
 const Footer = ({user, type="desktop"}:FooterProps) => {
    
@@ -17,6 +18,7 @@ const Footer = ({user, type="desktop"}:FooterProps) => {
             </h1>
 
             </div>
+         <Logout />
             
         
     </footer>

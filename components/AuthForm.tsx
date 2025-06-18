@@ -303,7 +303,7 @@ const form = useForm<z.infer<typeof formSchema>>({
         
         <div className='flex flex-col gap-4'>
         <Button type="submit" disabled={isLoading} className='form-btn'>
-          {isLoading ? (
+          {isLoading ?(
             <>
               <Loader2 size={20} className='animate-spin'/> &nbsp;Loading...
             </>
@@ -312,7 +312,18 @@ const form = useForm<z.infer<typeof formSchema>>({
           }
         </Button>
 
-       <p className="text-red-500 text-12"> {message && message} </p>
+      
+       {message && (
+         message.includes('Success') ? (
+           type === 'sign-in' ? (
+             <p className="text-green-500 text-12">Welcome back!</p>
+           ) : type === 'sign-up' ? (
+             <p className="text-green-500 text-12">Account created successfully!</p>
+           ) : <p className="text-green-500 text-12">{message}</p>
+         ) : (
+           <p className="text-red-500 text-12">{message}</p>
+         )
+       )}
         </div>
       </form>
     </Form>

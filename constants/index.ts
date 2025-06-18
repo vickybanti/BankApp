@@ -1,21 +1,23 @@
+import { CircleDollarSign , Home, ArrowRightLeft , Send  } from "lucide-react"
+
 export const sidebarLinks = [
   {
-    imgURL: "/icons/home.svg",
+    icon: Home,
     route: "/",
     label: "Home",
   },
   {
-    imgURL: "/icons/dollar-circle.svg",
+    icon: CircleDollarSign,
     route: "/my-banks",
     label: "My Banks",
   },
   {
-    imgURL: "/icons/transaction.svg",
+    icon: ArrowRightLeft,
     route: "/transaction-history",
     label: "Transaction History",
   },
   {
-    imgURL: "/icons/money-send.svg",
+    icon:Send,
     route: "/payment-transfer",
     label: "Transfer Funds",
   },

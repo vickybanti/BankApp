@@ -20,7 +20,16 @@ const CategoryBagde = ({category}:CategoryBadgeProps) => {
         chipBackgroundColor
     } = transactionCategoryStyles[category as keyof typeof transactionCategoryStyles] || transactionCategoryStyles.default
    
-   
+    if (!category) {
+        return (
+            <div className={cn('category-badge', borderColor, chipBackgroundColor)}>
+                <div className={cn('size-2 rounded-full', backgroundColor)} />
+                <p className={cn('text-[12px] font-medium', textColor)}>
+                    N/A
+                </p>
+            </div>
+        )
+    }   
     return (
         <div className={cn('category-badge', borderColor, chipBackgroundColor)}>
             <div className={cn('size-2 rounded-full', backgroundColor)} />

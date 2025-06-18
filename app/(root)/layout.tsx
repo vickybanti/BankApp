@@ -1,8 +1,10 @@
+import AppSidebar from "@/components/AppSidebar";
 import MobileNav from "@/components/MobileNav";
-import Sidebar from "@/components/Sidebar";
 import { getLoggedInUser } from "@/lib/actions/user.actions";
 import Image from "next/image";
 import { redirect } from "next/navigation";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+
 
 export default async function RootLayout({
   children,
@@ -15,8 +17,14 @@ export default async function RootLayout({
   if(!loggedIn) redirect('/sign-in')
 
   return (
+    <SidebarProvider>
+
+
     <main className="flex w-full h-screen">
-        <Sidebar user={loggedIn} />
+                    <AppSidebar user={loggedIn} />
+
+                <SidebarTrigger />
+
         <div className="flex flex-col size-full">
           <div className="root-layout">
             <Image src="/icons/logo.svg"
@@ -33,5 +41,7 @@ export default async function RootLayout({
         </div>
         
     </main>
+    </SidebarProvider>
+
   );
 }

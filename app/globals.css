@@ -365,7 +365,7 @@
 
   /* Sidebar */
   .sidebar {
-    @apply sticky left-0 top-0 flex h-screen w-fit flex-col  justify-between border-r border-gray-200 bg-white pt-8 text-white max-md:hidden sm:p-4 xl:p-6 2xl:w-[355px];
+    @apply left-0 right-10 top-0 flex h-screen w-fit flex-col bg-white justify-between border-r border-gray-200 pt-8 text-white max-md:hidden sm:p-4 xl:p-6 2xl:w-[355px];
   }
 
   .sidebar-logo {
@@ -378,5 +378,29 @@
 
   .sidebar-label {
     @apply font-semibold text-16 text-black-2 max-xl:hidden;
+  }
+}
+
+@layer base {
+  :root {
+    --sidebar: #ffffff; /* near-white */
+    --sidebar-foreground: #262626; /* very dark gray */
+    --sidebar-primary: #343434; /* dark gray */
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: #f7f7f7; /* very light gray */
+    --sidebar-accent-foreground: #343434;
+    --sidebar-border: #ebebeb; /* light gray */
+    --sidebar-ring: #b3b3b3; /* medium gray */
+  }
+
+  .dark {
+    --sidebar: #343434;
+    --sidebar-foreground: #ffffff;
+    --sidebar-primary: #6a4fff; /* bright purple (approx. oklch with chroma) */
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: #404040; /* dark gray */
+    --sidebar-accent-foreground: #ffffff;
+    --sidebar-border: rgba(255, 255, 255, 0.1);
+    --sidebar-ring: #5c5c5c; /* medium-dark gray */
   }
 }

@@ -5,7 +5,6 @@ import RightSidebar from '@/components/RightSidebar'
 import { getLoggedInUser } from '@/lib/actions/user.actions'
 import { getAccount, getAccounts } from '@/lib/actions/bank.actions'
 import RecentTransactions from '@/components/RecentTransactions'
-import Logout from '@/components/Logout'
 import {redirect} from 'next/navigation'
 
 type SearchParamProps = {
@@ -39,7 +38,7 @@ const Home = async ({ searchParams }: SearchParamProps) => {
   const account = await getAccount({ appwriteItemId });
 
   return (
-    <section className="overflow-hidden home">
+    <section className="home">
       <div className="home-content">
         <header className="home-header">
           <div className='flex items-center gap-3'>
@@ -49,7 +48,6 @@ const Home = async ({ searchParams }: SearchParamProps) => {
             user={loggedIn?.firstName || 'Guest'}
             subtext="Efficiently manage your bank accounts"
           />
-          <Logout />
           </div>
           <TotalBalanceBox
             accounts={accountsData}
@@ -57,15 +55,15 @@ const Home = async ({ searchParams }: SearchParamProps) => {
             totalCurrentBalance={accounts?.totalCurrentBalance}
           />
         </header>
-
+        
         <RecentTransactions
           accounts={accountsData}
           transactions={account?.transactions}
           appwriteItemId={appwriteItemId}
           page={currentPage}
         />
+        
       </div>
-
       <RightSidebar
         user={loggedIn}
         transactions={account?.transactions}
