@@ -1,11 +1,14 @@
 import HeaderBox from '@/components/HeaderBox'
 import TotalBalanceBox from '@/components/TotalBalanceBox'
-import React from 'react'
+import React, { Suspense } from 'react'
 import RightSidebar from '@/components/RightSidebar'
 import { getLoggedInUser } from '@/lib/actions/user.actions'
 import { getAccount, getAccounts } from '@/lib/actions/bank.actions'
 import RecentTransactions from '@/components/RecentTransactions'
 import {redirect} from 'next/navigation'
+import { Loader2 } from 'lucide-react'
+
+
 
 type SearchParamProps = {
   searchParams:  Promise<{
@@ -55,15 +58,21 @@ const Home = async ({ searchParams }: SearchParamProps) => {
             totalCurrentBalance={accounts?.totalCurrentBalance}
           />
         </header>
-        
+        <Suspense fallback={
+          <div className="flex items-center justify-center h-screen bg-gray-100">
+            <Loader2 className="animate-spin text-blue-400 w-10 h-10" />
+          </div>
+        }>
         <RecentTransactions
           accounts={accountsData}
           transactions={account?.transactions}
           appwriteItemId={appwriteItemId}
           page={currentPage}
         />
+        </Suspense>
         
       </div>
+
       <RightSidebar
         user={loggedIn}
         transactions={account?.transactions}

@@ -10,6 +10,9 @@ import {
 import { cn, formatAmount, formatDateTime, getTransactionStatus, removeSpecialCharacters } from '@/lib/utils'
 import { transactionCategoryStyles } from '@/constants'
 import { CategoryBadgeProps, Transaction, TransactionTableProps } from '@/types'
+import { Suspense } from 'react';
+import { Loader2 } from 'lucide-react'
+
 
 const CategoryBagde = ({category}:CategoryBadgeProps) => {
 
@@ -56,6 +59,7 @@ const TransactionsTable = ({transactions}:TransactionTableProps) => {
          </TableRow>
         </TableHeader>
         <TableBody>
+            <Suspense fallback={<Loader2 className='animate-spin-100 w-10 h-10'/>}>
             {transactions.map((t:Transaction) => {
                 //it takes one to two days to process transaction on sandbox
                 const status = getTransactionStatus(new Date(t.date))
@@ -103,6 +107,7 @@ const TransactionsTable = ({transactions}:TransactionTableProps) => {
                     </TableRow>
                 )
             })}
+            </Suspense>
         </TableBody>
     </Table>
 

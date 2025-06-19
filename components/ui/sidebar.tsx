@@ -292,7 +292,7 @@ const SidebarTrigger = React.forwardRef<
       }}
       {...props}
     >
-     {open ? (<ArrowRightToLine className="h-16 w-16"/>) : (<ArrowRightToLine className="rotate-180" />)}
+     {open ? (<ArrowRightToLine />) : (<ArrowRightToLine className="rotate-180" />)}
       <span className="sr-only">Toggle Sidebar</span>
     </Button>
   )

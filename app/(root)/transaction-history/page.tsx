@@ -8,6 +8,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import React from 'react'
+import { Suspense } from 'react';
+import { Loader2 } from 'lucide-react';
 
 
 type SearchParamProps = {
@@ -61,7 +63,7 @@ const TransactionHistory = async ({searchParams}:SearchParamProps) => {
           subtext="See your bank history here"
         />
       </div>
-
+    <Suspense fallback={<Loader2 className='w-6 h-6 animate-spin' />}>
       <div className="space-y-6">
         <div className="transactions-account">
           <div className='flex flex-col gap-2'>
@@ -117,6 +119,7 @@ const TransactionHistory = async ({searchParams}:SearchParamProps) => {
     </div>
   )}
 </section>
+    </Suspense>
 
     </div>
   )

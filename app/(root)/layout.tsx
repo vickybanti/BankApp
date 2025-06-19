@@ -4,6 +4,9 @@ import { getLoggedInUser } from "@/lib/actions/user.actions";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+import { Suspense } from 'react';
+import { Loader2 } from "lucide-react";
+
 
 
 export default async function RootLayout({
@@ -17,6 +20,9 @@ export default async function RootLayout({
   if(!loggedIn) redirect('/sign-in')
 
   return (
+    <Suspense fallback={<div className="flex items-center justify-center h-screen bg-gray-100"><Loader2 className="animate-spin text-blue-400 w-20 h-20" />
+    <h1 className="text-2xl text-gray-600 px-10">Loading account...</h1>
+    </div>}>
     <SidebarProvider>
 
 
@@ -42,6 +48,7 @@ export default async function RootLayout({
         
     </main>
     </SidebarProvider>
+    </Suspense>
 
   );
 }
