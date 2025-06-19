@@ -64,7 +64,7 @@ const TransactionHistory = async ({searchParams}:SearchParamProps) => {
         />
       </div>
 <Suspense fallback={
-      <div className="flex items-center justify-center h-screen w-screen">
+      <div className="flex items-center justify-center h-screen w-full">
         <Loader2 className="animate-spin text-blue-400 w-14 h-14" />
       </div>
     }>        <div className="space-y-6">

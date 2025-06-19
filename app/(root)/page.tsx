@@ -72,13 +72,12 @@ const Home = async ({ searchParams }: SearchParamProps) => {
         </Suspense>
         
       </div>
-        <div className="mr-8">
+        
       <RightSidebar
         user={loggedIn}
         transactions={account?.transactions}
         banks={accountsData?.slice(0, 2)}
       />
-        </div>
     </section>
   );
 };
