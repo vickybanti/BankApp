@@ -72,7 +72,7 @@ const Home = async ({ searchParams }: SearchParamProps) => {
         </Suspense>
         
       </div>
-        <div className="mr-4">
+        <div className="mr-8">
       <RightSidebar
         user={loggedIn}
         transactions={account?.transactions}
