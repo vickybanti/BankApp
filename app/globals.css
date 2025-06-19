@@ -106,7 +106,7 @@
  
   /* Home */
   .home {
-    @apply flex flex-row w-full no-scrollbar max-xl:max-h-screen max-xl:overflow-y-scroll;
+    @apply flex flex-row w-full overflow-x-hidden no-scrollbar max-xl:max-h-screen max-xl:overflow-y-scroll;
   }
 
   .home-content {
