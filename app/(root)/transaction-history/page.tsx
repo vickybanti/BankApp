@@ -63,8 +63,11 @@ const TransactionHistory = async ({searchParams}:SearchParamProps) => {
           subtext="See your bank history here"
         />
       </div>
-    <Suspense fallback={<Loader2 className='w-6 h-6 animate-spin' />}>
-      <div className="space-y-6">
+<Suspense fallback={
+      <div className="flex items-center justify-center h-screen w-screen">
+        <Loader2 className="animate-spin text-blue-400 w-14 h-14" />
+      </div>
+    }>        <div className="space-y-6">
         <div className="transactions-account">
           <div className='flex flex-col gap-2'>
             <h2 className='font-bold text-white text-18'>

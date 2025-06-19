@@ -29,8 +29,8 @@ const MyBanks = async() => {
           </h2>
           <div className="flex flex-wrap gap-6">
             <Suspense fallback={
-      <div className="flex items-center justify-center h-screen bg-gray-100">
-        <Loader2 className="animate-spin text-blue-400 w-10 h-10" />
+      <div className="flex items-center justify-center h-screen w-screen">
+        <Loader2 className="animate-spin text-blue-400 w-14 h-14" />
       </div>
     }>  
             {accounts && accounts.data.map((a:Account)=> (

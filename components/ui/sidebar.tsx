@@ -283,7 +283,7 @@ const SidebarTrigger = React.forwardRef<
       ref={ref}
       data-sidebar="trigger"
       variant="ghost"
-      className={cn("h-7 w-7 max-md:hidden mt-4", className)}
+      className={cn("px-1 max-md:hidden mt-2", className)}
       size="lg"
       onClick={(event) => {
         onClick?.(event)
@@ -293,7 +293,7 @@ const SidebarTrigger = React.forwardRef<
       {...props}
     >
      {open ? (<ArrowRightToLine />) : (<ArrowRightToLine className="rotate-180" />)}
-      <span className="sr-only">Toggle Sidebar</span>
+      {/* <span className="sr-only">Toggle Sidebar</span> */}
     </Button>
   )
 })

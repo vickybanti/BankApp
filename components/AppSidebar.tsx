@@ -28,10 +28,10 @@ const AppSidebar = ({user}:SiderbarProps) => {
             className='flex items-center gap-2 mb-12 cursor-pointer'>
             <Image
             src="/icons/logo.svg"
-            width={34}
-            height={34}
+            width={50}
+            height={50}
             alt="Horizon"
-            className='size-[24px] max-xl:size-14'
+            className='size-[50px] max-xl:size-14 pl-3'
             />
             <h1 className='sidebar-logo pl-5'>Horizon</h1>
 
@@ -42,7 +42,7 @@ const AppSidebar = ({user}:SiderbarProps) => {
                 return (
                 <SidebarMenuItem key={item.label}>
                  <SidebarMenuItem key={item.label} className='my-2'>
-  <SidebarMenuButton asChild>
+  <SidebarMenuButton asChild className='px-2'>
     <Link href={item.route} key={item.label} className={cn('sidebar-link',{'bg-bank-gradient':isActive})}>
       <div className='relative size-6'>
         <div className={cn('text-gray-600',{'brightness-[3] invert-0': isActive})}>
