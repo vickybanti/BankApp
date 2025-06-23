@@ -37,6 +37,7 @@ const TransactionHistory = async ({searchParams}:SearchParamProps) => {
       userId: loggedIn.$id
     })
     const accountsData = accounts.data
+
   
     const appwriteItemId =(id as string) || accountsData[0]?.appwriteItemId;
   

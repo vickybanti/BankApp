@@ -15,7 +15,19 @@ const RecentTransactions = ({accounts,
     page=1
 }:RecentTransactionsProps) => {
 
-    
+    if (!accounts || accounts.length === 0) {
+        return (
+            <div className="mt-6 space-y-3 text-center">
+                <p className="font-medium text-white">No bank accounts linked</p>
+                <Link
+                    href="/link-bank"
+                    className="text-blue-500 underline hover:text-blue-400"
+                >
+                    Link a bank account
+                </Link>
+            </div>
+        )
+    }    
     const rowsPerPage = 10
     const totalPages = Math.ceil(transactions.length/rowsPerPage)
 

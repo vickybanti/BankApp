@@ -178,7 +178,7 @@ export async function getLoggedInUser() {
 
     return JSON.parse(JSON.stringify(user));
   } catch (error) {
-    console.log(error)
+    console.l(error)
     return null;
   }
 }

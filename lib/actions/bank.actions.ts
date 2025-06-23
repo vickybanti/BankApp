@@ -27,6 +27,7 @@ export const getAccounts = async ({ userId }: getAccountsProps) => {
         });
         const accountData = accountsResponse.data.accounts[0];
 
+
         // get institution info from plaid
         const institution = await getInstitution({
           institutionId: accountsResponse.data.item.institution_id!,
