@@ -193,8 +193,8 @@ const form = useForm<z.infer<typeof formSchema>>({
                 control={form.control}
                 name="state"
                 render={({ field }) => (
-                  <FormItem className="flex flex-col">
-                    <FormLabel>State</FormLabel>
+                  <div className="form-item">
+                      <FormLabel className="form-label">State</FormLabel>
                     <Select value={field.value} onValueChange={field.onChange}>
                       <SelectTrigger className="w-[180px]">
                         <SelectValue placeholder="Select state" />
@@ -208,12 +208,11 @@ const form = useForm<z.infer<typeof formSchema>>({
                       </SelectContent>
                     </Select>
                     <FormMessage />
-                  </FormItem>
+                  </div>
                 )}
               />
 
 
-               {/* <FormFields control={form.control} name="state" label="Specific state e.g LA" type="text"/>   */}
               <FormFields control={form.control} name="postalCode" label="postal code e.g 10011" type="number"/> 
                            </div> 
                           <div className='flex gap-4'>
@@ -229,8 +228,8 @@ const form = useForm<z.infer<typeof formSchema>>({
                   return (
                 
                   
-                  <FormItem className="flex flex-col">
-                    <FormLabel>Date of birth</FormLabel>
+                  <FormItem className="form-item">
+                    <FormLabel className="form-label">Date of birth</FormLabel>
                     <Popover open={open} onOpenChange={setOpen}> {/* Control popover open/close state */}
                       <PopoverTrigger asChild>
                         <FormControl>

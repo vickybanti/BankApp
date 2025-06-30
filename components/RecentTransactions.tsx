@@ -18,13 +18,12 @@ const RecentTransactions = ({accounts,
     if (!accounts || accounts.length === 0) {
         return (
             <div className="mt-6 space-y-3 text-center">
-                <p className="font-medium text-white">No bank accounts linked</p>
-                <Link
-                    href="/link-bank"
-                    className="text-blue-500 underline hover:text-blue-400"
+                <h2 className="font-medium text-white">No bank accounts linked</h2>
+                <p
+                    className="text-blue-500"
                 >
-                    Link a bank account
-                </Link>
+                    Click on connect bank Link an account
+                </p>
             </div>
         )
     }    
