@@ -98,7 +98,7 @@ const TransactionsTable = ({transactions}:TransactionTableProps) => {
                         </TableCell>
 
                         <TableCell className='pl-2 pr-10 max-md:hidden'>
-                           <CategoryBagde category={Array.isArray(t.category) ? t.category[0] : (t.category ? t.category : t.personal_finance_category?.primary)} />
+                           <CategoryBagde category={Array.isArray(t.category) ? t.category[0] : (t.category ? t.category : t.personal_finance_category?.secondary)} />
                         </TableCell>
 
                         <TableCell className='pl-2 pr-10 max-md:hidden'>

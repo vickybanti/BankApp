@@ -107,9 +107,9 @@ export const signUp = async ({ password, ...userData }: SignUpParams) => {
 
 
 
-    // if (!dwollaCustomerUrl) {
-    //   throw new Error("Dwolla customer creation failed.");
-    // }
+    if (!dwollaCustomerUrl) {
+      throw new Error("Dwolla customer creation failed.");
+    }
 
     const dwollaCustomerId = extractCustomerIdFromUrl(dwollaCustomerUrl!);
 
