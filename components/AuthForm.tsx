@@ -195,6 +195,8 @@ const form = useForm<z.infer<typeof formSchema>>({
                 render={({ field }) => (
                   <div className="form-item">
                       <FormLabel className="form-label">State</FormLabel>
+                    <div className='flex flex-col w-full'>
+                  <FormControl>
                     <Select value={field.value} onValueChange={field.onChange}>
                       <SelectTrigger className="w-[180px]">
                         <SelectValue placeholder="Select state" />
@@ -207,6 +209,8 @@ const form = useForm<z.infer<typeof formSchema>>({
                         ))}
                       </SelectContent>
                     </Select>
+                  </FormControl>
+                    </div>
                     <FormMessage />
                   </div>
                 )}
@@ -230,6 +234,8 @@ const form = useForm<z.infer<typeof formSchema>>({
                   
                   <FormItem className="form-item">
                     <FormLabel className="form-label">Date of birth</FormLabel>
+                                        <div className='flex flex-col w-full'>
+
                     <Popover open={open} onOpenChange={setOpen}> {/* Control popover open/close state */}
                       <PopoverTrigger asChild>
                         <FormControl>
@@ -270,9 +276,7 @@ const form = useForm<z.infer<typeof formSchema>>({
                         />
                       </PopoverContent>
                     </Popover>
-                    <FormDescription>
-                      format:YYYY-MM-DD
-                    </FormDescription>
+                    </div>
                     <FormMessage />
                   </FormItem>
                 )}}
