@@ -6,8 +6,7 @@ import BankInfo from './BankInfo'
 import TransactionsTable from './TransactionsTable'
 import { Pagination } from './Pagination'
 import { Account, RecentTransactionsProps } from '@/types'
-import { Suspense } from 'react';
-import { Loader2 } from 'lucide-react'
+
 
 const RecentTransactions = ({accounts, 
     transactions = [],
@@ -50,7 +49,6 @@ const RecentTransactions = ({accounts,
 
              <Tabs defaultValue={appwriteItemId} className="w-full">
                 <TabsList className='recent-transactions-tablist'>
-                <Suspense fallback={<Loader2 />}>
                     {accounts.map((account:Account) => (
                         <TabsTrigger key={account.id} value={account.appwriteItemId}>
                             <BankTabItem 
@@ -60,10 +58,8 @@ const RecentTransactions = ({accounts,
                             />
                         </TabsTrigger>
                     ))}
-                </Suspense>
                 </TabsList>
                      
-                   <Suspense fallback={<Loader2 className="animate-spin text-blue-400 w-10 h-10" />}>
 
                 {accounts.map((account:Account) => (
  <TabsContent
@@ -102,7 +98,6 @@ const RecentTransactions = ({accounts,
 
 
                 ))}
-                                      </Suspense>
 
                 
                             </Tabs>
