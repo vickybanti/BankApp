@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Button } from "@/components/ui/button"
-import {Form, FormControl, FormField, FormLabel, FormMessage,FormItem,FormDescription } from "@/components/ui/form"
+import {Form, FormControl, FormField, FormLabel, FormMessage,FormItem } from "@/components/ui/form"
 import FormFields from './FormFields'
 import { authFormSchema } from '@/lib/utils'
 import { Loader2 } from 'lucide-react'
